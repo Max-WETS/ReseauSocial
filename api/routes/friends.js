@@ -6,7 +6,7 @@ const friendController = require("../controllers/friendController");
 // get friends
 router.get("/:id", friendController.getFriends);
 // add a friend
-router.put("/:id/add", friendController.addFriend);
+router.post("/:id/add", friendController.addFriend);
 // remove a friend
 router.put("/:id/remove", friendController.removeFriend);
 // recommend a friend

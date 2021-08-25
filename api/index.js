@@ -7,7 +7,8 @@ const morgan = require("morgan");
 const multer = require("multer");
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
-// const friendsRoute = require("./routes/friends");
+const postRoute = require("./routes/posts");
+const friendsRoute = require("./routes/friends");
 const router = express.Router();
 const path = require("path");
 
@@ -34,7 +35,8 @@ app.use(morgan("common"));
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
-// app.use("/api/friends", friendsRoute);
+app.use("/api/posts", postRoute);
+app.use("/api/friends", friendsRoute);
 
 app.listen(3000, () => {
   console.log("Backend server running");

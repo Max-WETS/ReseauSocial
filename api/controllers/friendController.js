@@ -29,9 +29,10 @@ module.exports.addFriend = async (req, res) => {
     // add friend to the sender's list
     try {
       let friendList = await FriendList.findOne({ userId: req.body.userId });
-      if (!friendList)
-        newFriendList = new FriendList({ userId: req.body.userId });
-      friendList = await newFriendList.save();
+      if (!friendList) {
+        const newFriendList = new FriendList({ userId: req.body.userId });
+        friendList = await newFriendList.save();
+      }
       if (
         !friendList.friendsList.some(
           (friend) => friend.friendId === req.params.id
@@ -56,9 +57,10 @@ module.exports.addFriend = async (req, res) => {
     // add the sender to the receiver's list
     try {
       let friendList = await FriendList.findOne({ userId: req.params.id });
-      if (!friendList)
-        newFriendList = new FriendList({ userId: req.params.id });
-      friendList = await newFriendList.save();
+      if (!friendList) {
+        const newFriendList = new FriendList({ userId: req.params.id });
+        friendList = await newFriendList.save();
+      }
       if (
         !friendList.friendsList.some(
           (friend) => friend.friendId === req.body.userId
