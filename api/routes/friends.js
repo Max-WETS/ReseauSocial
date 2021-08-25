@@ -10,6 +10,6 @@ router.post("/:id/add", friendController.addFriend);
 // remove a friend
 router.put("/:id/remove", friendController.removeFriend);
 // recommend a friend
-router.put("/:id/recommend", friendController.recommendFriend);
+router.post("/:id/recommend", friendController.recommendFriend);
 
 module.exports = router;

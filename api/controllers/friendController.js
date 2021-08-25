@@ -7,7 +7,7 @@ module.exports.getFriends = async (req, res) => {
     return res.status(400).send("ID unknown : " + req.params.id);
 
   try {
-    const friendList = await FriendList.findById(req.params.id);
+    const friendList = await FriendList.findOne({ userId: req.params.id });
     !friendList &&
       res
         .status(404)
@@ -26,19 +26,35 @@ module.exports.addFriend = async (req, res) => {
     return res.status(400).send("ID unknown : " + req.params.id);
 
   if (req.body.userId !== req.params.id) {
-    // add friend to the sender's list
     try {
-      let friendList = await FriendList.findOne({ userId: req.body.userId });
-      if (!friendList) {
-        const newFriendList = new FriendList({ userId: req.body.userId });
-        friendList = await newFriendList.save();
+      // add friend to the sender's list or create a new one
+      let senderFriendList = await FriendList.findOne({
+        userId: req.body.userId,
+      });
+      if (!senderFriendList) {
+        const newSenderFriendList = new FriendList({ userId: req.body.userId });
+        senderFriendList = await newSenderFriendList.save();
       }
+
+      // add yourself to the receiver's friends list or create a new one
+      let receiverFriendList = await FriendList.findOne({
+        userId: req.params.id,
+      });
+      if (!receiverFriendList) {
+        const newReceiverFriendList = new FriendList({ userId: req.params.id });
+        receiverFriendList = await newReceiverFriendList.save();
+      }
+
+      // check if either user is already friend with the other
       if (
-        !friendList.friendsList.some(
+        !senderFriendList.friendsList.some(
           (friend) => friend.friendId === req.params.id
+        ) &&
+        !receiverFriendList.friendsList.some(
+          (friend) => friend.friendId === req.body.userId
         )
       ) {
-        await friendList.updateOne({
+        await senderFriendList.updateOne({
           $push: {
             friendsList: {
               friendId: req.params.id,
@@ -46,27 +62,7 @@ module.exports.addFriend = async (req, res) => {
             },
           },
         });
-        res.status(200).json("friend invitation sent");
-      } else {
-        res.status(403).json("you're already friend with this user");
-      }
-    } catch (err) {
-      res.status(500).json(err);
-    }
-
-    // add the sender to the receiver's list
-    try {
-      let friendList = await FriendList.findOne({ userId: req.params.id });
-      if (!friendList) {
-        const newFriendList = new FriendList({ userId: req.params.id });
-        friendList = await newFriendList.save();
-      }
-      if (
-        !friendList.friendsList.some(
-          (friend) => friend.friendId === req.body.userId
-        )
-      ) {
-        await friendList.updateOne({
+        await receiverFriendList.updateOne({
           $push: {
             friendsList: {
               friendId: req.body.userId,
@@ -74,9 +70,10 @@ module.exports.addFriend = async (req, res) => {
             },
           },
         });
-        res.status(200).json("friend invitation received");
+
+        res.status(200).json("friend invitation sent");
       } else {
-        res.status(403).json("this person is already your friend");
+        res.status(403).json("you're already friend with this user");
       }
     } catch (err) {
       res.status(500).json(err);
@@ -92,50 +89,47 @@ module.exports.removeFriend = async (req, res) => {
     return res.status(400).send("ID unknown : " + req.params.id);
 
   if (req.body.userId !== req.params.id) {
-    // remove friend from the sender's list
     try {
-      let friendList = await FriendList.findOne({ userId: req.body.userId });
-      !friendList && res.status(400).json("This user has no friends");
+      // remove friend from the sender's list
+      let senderFriendList = await FriendList.findOne({
+        userId: req.body.userId,
+      });
+      !senderFriendList && res.status(400).json("You have no friends");
 
+      // remove the sender from the receiver's list
+      let receiverFriendList = await FriendList.findOne({
+        userId: req.params.id,
+      });
+      !receiverFriendList && res.status(400).json("This user has no friends");
+
+      // check if both users are already friends with one another
       if (
-        !friendList.friendsList.find(
+        senderFriendList.friendsList.find(
           (friend) => friend.friendId === req.params.id
+        ) &&
+        receiverFriendList.friendsList.find(
+          (friend) => friend.friendId === req.body.userId
         )
       ) {
-        await friendList.updateOne({
+        await senderFriendList.updateOne({
           $pull: {
             friendsList: {
               friendId: req.params.id,
             },
           },
         });
-        res.status(200).json("friend removed from your list");
-      } else {
-        res.status(403).json("this user is not your friend");
-      }
-    } catch (err) {
-      res.status(500).json(err);
-    }
 
-    // remove the sender from the receiver's list
-    try {
-      let friendList = await FriendList.findOne({ userId: req.params.id });
-      !friendList && res.status(400).json("This user has no friends");
-      if (
-        friendList.friendsList.find(
-          (friend) => friend.friendId === req.body.userId
-        )
-      ) {
-        await friendList.updateOne({
+        await receiverFriendList.updateOne({
           $pull: {
             friendsList: {
               friendId: req.body.userId,
             },
           },
         });
-        res.status(200).json("you were remove from this friend's list");
+
+        res.status(200).json("friend removed from your list");
       } else {
-        res.status(403).json("this person is not your friend");
+        res.status(403).json("this user is not your friend");
       }
     } catch (err) {
       res.status(500).json(err);
@@ -162,9 +156,10 @@ module.exports.recommendFriend = async (req, res) => {
   if (req.body.userId !== req.params.id) {
     try {
       let friendList = await FriendList.findOne({ userId: req.params.id });
-      if (!friendList)
-        newFriendList = new FriendList({ userId: req.params.id });
-      friendList = await newFriendList.save();
+      if (!friendList) {
+        const newFriendList = new FriendList({ userId: req.params.id });
+        friendList = await newFriendList.save();
+      }
 
       if (
         !friendList.friendsList.some(
