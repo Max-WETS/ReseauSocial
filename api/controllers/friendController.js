@@ -185,3 +185,63 @@ module.exports.recommendFriend = async (req, res) => {
     res.status(403).json("you can't recommend yourself as a friend");
   }
 };
+
+// accept friend request
+module.exports.acceptFriend = async (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+  if (req.body.userId !== req.params.id) {
+    try {
+      // request the sender's friend list
+      const senderFriendList = await FriendList.findOne({
+        userId: req.body.userId,
+      });
+      !senderFriendList && res.status(400).json("you have no friends");
+
+      // request the receiver's friend list
+      const receiverFriendList = await FriendList.findOne({
+        userId: req.params.id,
+      });
+      !receiverFriendList && res.status(400).json("this user has no friends");
+
+      // check if both users are already friends
+      if (
+        senderFriendList.friendsList.some(
+          (friend) => friend.friendId === req.params.id
+        ) &&
+        receiverFriendList.friendsList.some(
+          (friend) => friend.friendId === req.body.userId
+        )
+      ) {
+        await senderFriendList.updateOne(
+          {
+            $set: {
+              "friendsList.$[friend].status": "confirmé",
+            },
+          },
+          { multi: true, arrayFilters: [{ "friend.friendId": req.params.id }] }
+        );
+        await receiverFriendList.updateOne(
+          {
+            $set: {
+              "friendsList.$[friend].status": "confirmé",
+            },
+          },
+          {
+            multi: true,
+            arrayFilters: [{ "friend.friendId": req.body.userId }],
+          }
+        );
+
+        res.status(200).json("friend invitation accepted");
+      } else {
+        res.status(403).json("you're not friend with this user");
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  } else {
+    res.status(403).json("you can't accept yourself as a friend");
+  }
+};

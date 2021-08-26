@@ -11,5 +11,7 @@ router.post("/:id/add", friendController.addFriend);
 router.put("/:id/remove", friendController.removeFriend);
 // recommend a friend
 router.post("/:id/recommend", friendController.recommendFriend);
+// accept friend request
+router.put("/:id/accept", friendController.acceptFriend);
 
 module.exports = router;
