@@ -90,17 +90,25 @@ module.exports.removeFriend = async (req, res) => {
 
   if (req.body.userId !== req.params.id) {
     try {
+      let friendRequestRejection = false;
       // remove friend from the sender's list
-      let senderFriendList = await FriendList.findOne({
+      const senderFriendList = await FriendList.findOne({
         userId: req.body.userId,
       });
       !senderFriendList && res.status(400).json("You have no friends");
 
       // remove the sender from the receiver's list
-      let receiverFriendList = await FriendList.findOne({
+      const receiverFriendList = await FriendList.findOne({
         userId: req.params.id,
       });
       !receiverFriendList && res.status(400).json("This user has no friends");
+
+      // check if it's a friend request rejection
+      const senderObject = receiverFriendList.friendsList.find(
+        (friend) => friend.friendId === req.body.userId
+      );
+      if (senderObject.status === "invitation en cours")
+        friendRequestRejection = true;
 
       // check if both users are already friends with one another
       if (
@@ -127,7 +135,11 @@ module.exports.removeFriend = async (req, res) => {
           },
         });
 
-        res.status(200).json("friend removed from your list");
+        if (friendRequestRejection) {
+          res.status(200).json("friend request rejected");
+        } else {
+          res.status(200).json("friend removed from your list");
+        }
       } else {
         res.status(403).json("this user is not your friend");
       }
