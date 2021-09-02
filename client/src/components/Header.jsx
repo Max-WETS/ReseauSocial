@@ -27,6 +27,7 @@ import {
 import { ChatIcon, ChevronDownIcon, SearchIcon } from "@chakra-ui/icons";
 import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 function Header() {
   return (
@@ -39,15 +40,17 @@ function Header() {
       zIndex={999}
     >
       <HStack spacing="10px">
-        <Center
-          fontSize="24px"
-          ml="20px"
-          fontWeight="bold"
-          color="white"
-          cursor="pointer"
-        >
-          <Text>MaxWeb</Text>
-        </Center>
+        <Link to="/">
+          <Center
+            fontSize="24px"
+            ml="20px"
+            fontWeight="bold"
+            color="white"
+            cursor="pointer"
+          >
+            <Text>MaxWeb</Text>
+          </Center>
+        </Link>
         <InputGroup>
           <InputLeftElement
             pointerEvents="none"
@@ -63,29 +66,38 @@ function Header() {
       </HStack>
       <Spacer />
       <HStack spacing="10px" mr="20px">
-        <Flex
-          _hover={{ bg: "gray.200" }}
-          align="center"
-          maxW="100px"
-          h="35px"
-          bg="white"
-          borderRadius="50px"
-          cursor="pointer"
-        >
-          <Avatar ml="1px" size="sm" name="Maxime Wets" src="person/Max.jpg" />
-          <Text ml="4px" mr="8px">
-            Maxime
-          </Text>
-        </Flex>
-        <Circle
-          bg="white"
-          h="35px"
-          w="40px"
-          cursor="pointer"
-          _hover={{ bg: "gray.200" }}
-        >
-          <ChatIcon />
-        </Circle>
+        <Link to="/profile">
+          <Flex
+            _hover={{ bg: "gray.200" }}
+            align="center"
+            maxW="100px"
+            h="35px"
+            bg="white"
+            borderRadius="50px"
+            cursor="pointer"
+          >
+            <Avatar
+              ml="1px"
+              size="sm"
+              name="Maxime Wets"
+              src="person/Max.jpg"
+            />
+            <Text ml="4px" mr="8px">
+              Maxime
+            </Text>
+          </Flex>
+        </Link>
+        <Link to="/chat">
+          <Circle
+            bg="white"
+            h="35px"
+            w="40px"
+            cursor="pointer"
+            _hover={{ bg: "gray.200" }}
+          >
+            <ChatIcon />
+          </Circle>
+        </Link>
         <Menu>
           <>
             <MenuButton
@@ -98,7 +110,9 @@ function Header() {
             ></MenuButton>
             <MenuList>
               <MenuItem icon={<FaUser />}>Profile</MenuItem>
-              <MenuItem icon={<FiLogOut />}>Logout</MenuItem>
+              <Link to="/login">
+                <MenuItem icon={<FiLogOut />}>Logout</MenuItem>
+              </Link>
             </MenuList>
           </>
         </Menu>

@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../components/Header";
-import ProfilePics from "../components/ProfilePics";
-import ProfileMenu from "../components/ProfileMenu";
+import ProfilePics from "../components/profile/ProfilePics";
+import ProfileMenu from "../components/profile/ProfileMenu";
 
 function Profile() {
   return (
