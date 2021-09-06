@@ -35,6 +35,7 @@ import axios from "axios";
 function Header({ userData }) {
   const { user, dispatch } = useContext(AuthContext);
   const history = useHistory();
+  const PF = "http://localhost:3000/";
 
   const handleClick = () => {
     const path = "/login";
@@ -68,7 +69,7 @@ function Header({ userData }) {
       </HStack>
       <Spacer />
       <HStack spacing="10px" mr="20px">
-        <Link to="/profile">
+        <Link to={`/profile/${user.userId}`}>
           <Flex
             _hover={{ bg: "gray.200" }}
             align="center"
@@ -82,7 +83,7 @@ function Header({ userData }) {
               ml="1px"
               size="sm"
               name="Maxime Wets"
-              src={user.profilePicture || "person/noAvatar.jpg"}
+              src={PF + user.profilePicture || "person/noAvatar.jpg"}
             />
             <Text ml="4px" mr="8px">
               {user.username}

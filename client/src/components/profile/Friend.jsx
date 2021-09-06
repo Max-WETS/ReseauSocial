@@ -12,6 +12,8 @@ import React from "react";
 import { HiUserRemove } from "react-icons/hi";
 
 function Friend({ friend }) {
+  const PF = "http://localhost:3000/";
+
   return (
     <Flex
       h="80px"
@@ -25,7 +27,7 @@ function Friend({ friend }) {
         <Avatar
           size="md"
           name={friend.username || "unknown user"}
-          src={friend.profilePicture || "person/noAvatar.jpg"}
+          src={PF + friend.profilePicture || "person/noAvatar.jpg"}
           cursor="pointer"
         />
         <Text h="14px" fontWeight="500" position="relative" top="-5px">

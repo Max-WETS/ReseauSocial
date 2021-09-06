@@ -8,8 +8,8 @@ import {
   HStack,
   Text,
   Avatar,
-  Link,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 import { SearchIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
@@ -19,6 +19,7 @@ function SearchBar() {
   const [users, setUsers] = useState([]);
   const [text, setText] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const PF = "http://localhost:3000/";
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -61,21 +62,23 @@ function SearchBar() {
           value={text}
         />
       </InputGroup>
-      <Box mt="4px" maxH="250px" w="99%" overflowY="auto" zIndex="6">
+      <Box mt="4px" maxH="250px" w="99%" overflowY="auto" zIndex="50">
         {suggestions &&
           suggestions.map((suggestion, i) => (
-            <Link to="#" style={{ textDecoration: "none" }}>
+            <Link
+              to={`/profile/${suggestion._id}`}
+              style={{ textDecoration: "none" }}
+              key={i}
+            >
               <HStack
                 bg="white"
-                key={i}
                 p="4px"
                 _hover={{ backgroundColor: "blue.200" }}
-                cursor="pointer"
               >
                 <Avatar
                   size="md"
                   name={suggestion.username}
-                  src={suggestion.profilePicture}
+                  src={PF + suggestion.profilePicture}
                   cursor="pointer"
                 />
                 <Text

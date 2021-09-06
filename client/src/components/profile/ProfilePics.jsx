@@ -17,6 +17,7 @@ import axios from "axios";
 
 function ProfilePics({ userData }) {
   const [isLargerThan900] = useMediaQuery("(min-width: 900px)");
+  const PF = "http://localhost:3000/";
 
   return (
     <>
@@ -29,7 +30,7 @@ function ProfilePics({ userData }) {
             h="350px"
             w="900px"
             objectFit="cover"
-            src="cover/nocover.svg"
+            src={PF + "cover/nocover.svg"}
             alt="cover picture"
             borderBottomRadius="5px"
           />
@@ -50,7 +51,7 @@ function ProfilePics({ userData }) {
                   w="150px"
                   h="150px"
                   name={userData.username}
-                  src={userData.profilePicture || "person/noAvatar.png"}
+                  src={PF + userData.profilePicture || "person/noAvatar.png"}
                   cursor="pointer"
                   border="white 2px solid"
                 />

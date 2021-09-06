@@ -27,12 +27,11 @@ function Friends({ friends }) {
   const friendsList = user.userFriends;
 
   const confirmedFriends =
-    friendsList.filter((friend) => friend.status === "confirmé") || null;
+    friends.filter((friend) => friend.status === "confirmé") || null;
   const waitingFriends =
-    friendsList.filter((friend) => friend.status === "invitation en cours") ||
-    null;
+    friends.filter((friend) => friend.status === "invitation en cours") || null;
   const recommendedFriends =
-    friendsList.filter((friend) => friend.status === "recommandé") || null;
+    friends.filter((friend) => friend.status === "recommandé") || null;
 
   return (
     <Container w="600px" paddingTop="10px" pr={0} pl={0}>
