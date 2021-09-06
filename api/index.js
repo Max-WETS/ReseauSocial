@@ -38,6 +38,6 @@ app.use("/api/users", userRoute);
 app.use("/api/posts", postRoute);
 app.use("/api/friends", friendsRoute);
 
-app.listen(3000, () => {
+app.listen(5000, () => {
   console.log("Backend server running");
 });

@@ -9,8 +9,12 @@ import Chat from "./pages/Chat";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
 
 function App() {
+  const { user } = useContext(AuthContext);
+
   return (
     <Router>
       <Switch>
@@ -27,7 +31,7 @@ function App() {
           <Register />
         </Route>
         <Route exact path="/login">
-          <Login />
+          {user ? <Redirect to="/" /> : <Login />}
         </Route>
       </Switch>
     </Router>

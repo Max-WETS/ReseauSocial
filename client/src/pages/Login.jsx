@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useRef } from "react";
 import {
   CircularProgress,
   CircularProgressLabel,
@@ -13,8 +13,25 @@ import {
   Input,
   Button,
 } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
+import { Link } from "react-router-dom";
+import { loginCall } from "../apiCalls";
+import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
 
 function Login() {
+  const email = useRef();
+  const password = useRef();
+  const { isFetching, dispatch } = useContext(AuthContext);
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    loginCall(
+      { email: email.current.value, password: password.current.value },
+      dispatch
+    );
+  };
+
   return (
     <Flex
       w="100vw"
@@ -33,68 +50,90 @@ function Login() {
           </Text>
         </VStack>
         <VStack flex={1} justifyContent="center">
-          <FormControl
-            h="300px"
-            p="20px"
-            bg="white"
-            borderRadius="10px"
-            display="flex"
-            flexDirection="column"
-            justifyContent="space-between"
-          >
-            <Input
-              type="email"
-              placeholder="Email"
-              required
-              h="50px"
+          <Formik>
+            <Form
+              h="300px"
+              p="20px"
+              bg="white"
               borderRadius="10px"
-              border="1px solid lightgray"
-              fontSize="18px"
-              pl="20px"
-              _focus={{ outline: "none" }}
-            />
-            <Input
-              type="password"
-              placeholder="Password"
-              required
-              h="50px"
-              minLength="6"
-              borderRadius="10px"
-              border="1px solid lightgray"
-              fontSize="18px"
-              pl="20px"
-              _focus={{ outline: "none" }}
-            />
-            <Button
-              type="submit"
-              h="50px"
-              borderRadius="10px"
-              border="none"
-              bg="blue.400"
-              color="white"
-              fontSize="20px"
-              fontWeight="500"
-              cursor="pointer"
-              _focus={{ outline: "none" }}
+              display="flex"
+              flexDirection="column"
+              justifyContent="space-between"
+              onSubmit={handleClick}
             >
-              Log In
-            </Button>
-            <Button
-              w="60%"
-              alignSelf="center"
-              h="50px"
-              borderRadius="10px"
-              border="none"
-              bg="green.400"
-              color="white"
-              fontSize="20px"
-              fontWeight="500"
-              cursor="pointer"
-              _focus={{ outline: "none" }}
-            >
-              Create a New Account
-            </Button>
-          </FormControl>
+              <FormControl>
+                <Input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  id="email"
+                  required
+                  ref={email}
+                  h="50px"
+                  borderRadius="10px"
+                  border="1px solid lightgray"
+                  fontSize="18px"
+                  pl="20px"
+                  _focus={{ outline: "none" }}
+                />
+              </FormControl>
+              <FormControl>
+                <Input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  id="password"
+                  required
+                  ref={password}
+                  h="50px"
+                  minLength="6"
+                  borderRadius="10px"
+                  border="1px solid lightgray"
+                  fontSize="18px"
+                  pl="20px"
+                  _focus={{ outline: "none" }}
+                />
+                <Button
+                  type="submit"
+                  h="50px"
+                  borderRadius="10px"
+                  border="none"
+                  bg="blue.400"
+                  color="white"
+                  fontSize="20px"
+                  fontWeight="500"
+                  cursor="pointer"
+                  _focus={{ outline: "none" }}
+                  disabled={isFetching}
+                >
+                  {isFetching ? (
+                    <CircularProgress color="white" size="20px" />
+                  ) : (
+                    "Sign In"
+                  )}
+                </Button>
+              </FormControl>
+              <Button
+                w="60%"
+                alignSelf="center"
+                h="50px"
+                borderRadius="10px"
+                border="none"
+                bg="green.400"
+                color="white"
+                fontSize="20px"
+                fontWeight="500"
+                cursor="pointer"
+                _focus={{ outline: "none" }}
+              >
+                {isFetching ? (
+                  <CircularProgress color="white" size="20px" />
+                ) : (
+                  <Link to="/register">Create a New Account</Link>
+                )}
+              </Button>
+            </Form>
+          </Formik>
         </VStack>
       </Flex>
     </Flex>

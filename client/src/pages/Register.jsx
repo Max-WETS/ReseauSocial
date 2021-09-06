@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useRef } from "react";
+import { useHistory } from "react-router";
+import axios from "axios";
 import {
   CircularProgress,
   CircularProgressLabel,
@@ -13,8 +15,35 @@ import {
   Input,
   Button,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import { Form, Formik } from "formik";
 
 function Register() {
+  const username = useRef();
+  const email = useRef();
+  const password = useRef();
+  const passwordAgain = useRef();
+  const history = useHistory();
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    if (passwordAgain.current.value !== password.current.value) {
+      passwordAgain.current.setCustomValidity("Passwords don't match!");
+    } else {
+      const user = {
+        username: username.current.value,
+        email: email.current.value,
+        password: password.current.value,
+      };
+      try {
+        await axios.post("/auth/register", user);
+        history.push("/login");
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
   return (
     <Flex
       w="100vw"
@@ -33,79 +62,116 @@ function Register() {
           </Text>
         </VStack>
         <VStack flex={1} justifyContent="center">
-          <FormControl
-            h="300px"
-            p="20px"
-            bg="white"
-            borderRadius="10px"
-            display="flex"
-            flexDirection="column"
-            justifyContent="space-between"
-          >
-            <Input
-              type="text"
-              placeholder="username"
-              required
-              h="50px"
+          <Formik>
+            <Form
+              h="300px"
+              p="20px"
+              bg="white"
               borderRadius="10px"
-              border="1px solid lightgray"
-              fontSize="18px"
-              pl="20px"
-              _focus={{ outline: "none" }}
-            />
-            <Input
-              type="email"
-              placeholder="email"
-              required
-              h="50px"
-              borderRadius="10px"
-              border="1px solid lightgray"
-              fontSize="18px"
-              pl="20px"
-              _focus={{ outline: "none" }}
-            />
-            <Input
-              type="password"
-              placeholder="password"
-              required
-              h="50px"
-              minLength="6"
-              borderRadius="10px"
-              border="1px solid lightgray"
-              fontSize="18px"
-              pl="20px"
-              _focus={{ outline: "none" }}
-            />
-            <Button
-              type="submit"
-              h="50px"
-              borderRadius="10px"
-              border="none"
-              bg="blue.400"
-              color="white"
-              fontSize="20px"
-              fontWeight="500"
-              cursor="pointer"
-              _focus={{ outline: "none" }}
+              display="flex"
+              flexDirection="column"
+              justifyContent="space-between"
+              onSubmit={handleClick}
             >
-              Sign Up
-            </Button>
-            <Button
-              w="60%"
-              h="50px"
-              borderRadius="10px"
-              border="none"
-              bg="green.400"
-              color="white"
-              fontSize="20px"
-              fontWeight="500"
-              cursor="pointer"
-              alignSelf="center"
-              _focus={{ outline: "none" }}
-            >
-              Log into Account
-            </Button>
-          </FormControl>
+              <FormControl>
+                <Input
+                  type="text"
+                  name="username"
+                  placeholder="username"
+                  id="signupUsername"
+                  ref={username}
+                  required
+                  h="50px"
+                  borderRadius="10px"
+                  border="1px solid lightgray"
+                  fontSize="18px"
+                  pl="20px"
+                  _focus={{ outline: "none" }}
+                />
+              </FormControl>
+              <FormControl>
+                <Input
+                  type="email"
+                  name="email"
+                  placeholder="email"
+                  id="signupEmail"
+                  ref={email}
+                  required
+                  h="50px"
+                  borderRadius="10px"
+                  border="1px solid lightgray"
+                  fontSize="18px"
+                  pl="20px"
+                  _focus={{ outline: "none" }}
+                />
+              </FormControl>
+              <FormControl>
+                <Input
+                  type="password"
+                  name="password"
+                  placeholder="password"
+                  id="signupPassword"
+                  ref={password}
+                  required
+                  h="50px"
+                  minLength="6"
+                  borderRadius="10px"
+                  border="1px solid lightgray"
+                  fontSize="18px"
+                  pl="20px"
+                  _focus={{ outline: "none" }}
+                />
+              </FormControl>
+              <FormControl>
+                <Input
+                  type="password"
+                  name="passwordAgain"
+                  placeholder="password again"
+                  id="signupPasswordAgain"
+                  ref={passwordAgain}
+                  required
+                  h="50px"
+                  minLength="6"
+                  borderRadius="10px"
+                  border="1px solid lightgray"
+                  fontSize="18px"
+                  pl="20px"
+                  _focus={{ outline: "none" }}
+                />
+              </FormControl>
+              <Button
+                type="submit"
+                h="50px"
+                borderRadius="10px"
+                border="none"
+                bg="blue.400"
+                color="white"
+                fontSize="20px"
+                fontWeight="500"
+                cursor="pointer"
+                _focus={{ outline: "none" }}
+              >
+                Sign Up
+              </Button>
+              <Link to="/login">
+                <Button
+                  w="60%"
+                  h="50px"
+                  borderRadius="10px"
+                  border="none"
+                  bg="green.400"
+                  color="white"
+                  fontSize="20px"
+                  fontWeight="500"
+                  cursor="pointer"
+                  alignSelf="center"
+                  _focus={{ outline: "none" }}
+                >
+                  Log into Account
+                </Button>
+              </Link>
+            </Form>
+          </Formik>
         </VStack>
       </Flex>
     </Flex>

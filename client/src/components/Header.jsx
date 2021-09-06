@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Flex,
   Spacer,
@@ -27,9 +27,21 @@ import {
 import { ChatIcon, ChevronDownIcon, SearchIcon } from "@chakra-ui/icons";
 import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
 
 function Header() {
+  const { user, dispatch } = useContext(AuthContext);
+  const history = useHistory();
+
+  const handleClick = () => {
+    const path = "/login";
+    user && axios.get("/auth/logout");
+    dispatch({ type: "LOGOUT" });
+    history.push(path);
+  };
+
   return (
     <Flex
       h="50px"
@@ -110,9 +122,9 @@ function Header() {
             ></MenuButton>
             <MenuList>
               <MenuItem icon={<FaUser />}>Profile</MenuItem>
-              <Link to="/login">
-                <MenuItem icon={<FiLogOut />}>Logout</MenuItem>
-              </Link>
+              <MenuItem icon={<FiLogOut />} onClick={handleClick}>
+                Logout
+              </MenuItem>
             </MenuList>
           </>
         </Menu>
