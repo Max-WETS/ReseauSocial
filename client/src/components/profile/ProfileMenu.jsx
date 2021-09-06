@@ -48,7 +48,6 @@ function ProfileMenu({ userData, friends }) {
           </Container>
         </Box>
       </Tabs>
-      <Box bg="gray.100" w="100%" h="30px"></Box>
     </>
   );
 }

@@ -44,7 +44,7 @@ function Profile() {
       }
     };
     fetchFriends();
-  }, [user, dispatch]);
+  }, [user.userId, dispatch]);
 
   return (
     <>

@@ -29,6 +29,7 @@ import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import SearchBar from "./SearchBar";
 import axios from "axios";
 
 function Header({ userData }) {
@@ -37,7 +38,7 @@ function Header({ userData }) {
 
   const handleClick = () => {
     const path = "/login";
-    user && axios.get("/auth/logout");
+    axios.get("/auth/logout");
     dispatch({ type: "LOGOUT" });
     history.push(path);
   };
@@ -63,18 +64,7 @@ function Header({ userData }) {
             <Text>MaxWeb</Text>
           </Center>
         </Link>
-        <InputGroup>
-          <InputLeftElement
-            pointerEvents="none"
-            children={<SearchIcon color="gray.500" />}
-          />
-          <Input
-            h="35px"
-            bg="white"
-            type="search"
-            placeholder="Search someone..."
-          />
-        </InputGroup>
+        <SearchBar />
       </HStack>
       <Spacer />
       <HStack spacing="10px" mr="20px">

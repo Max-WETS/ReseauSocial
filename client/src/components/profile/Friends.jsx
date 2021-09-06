@@ -23,6 +23,17 @@ import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 
 function Friends({ friends }) {
+  const { user } = useContext(AuthContext);
+  const friendsList = user.userFriends;
+
+  const confirmedFriends =
+    friendsList.filter((friend) => friend.status === "confirmé") || null;
+  const waitingFriends =
+    friendsList.filter((friend) => friend.status === "invitation en cours") ||
+    null;
+  const recommendedFriends =
+    friendsList.filter((friend) => friend.status === "recommandé") || null;
+
   return (
     <Container w="600px" paddingTop="10px" pr={0} pl={0}>
       <Grid
@@ -54,17 +65,24 @@ function Friends({ friends }) {
         <TabPanels>
           <TabPanel>
             <SimpleGrid columns={2} spacing={5}>
-              <Friend />
-              <Friend />
-              <Friend />
+              {confirmedFriends.map((friend) => (
+                <Friend key={friend.friendId} friend={friend} />
+              ))}
             </SimpleGrid>
           </TabPanel>
           <TabPanel>
-            <Friend />
-            <Friend />
+            <SimpleGrid columns={2} spacing={5}>
+              {waitingFriends.map((friend) => (
+                <Friend key={friend.friendId} friend={friend} />
+              ))}
+            </SimpleGrid>
           </TabPanel>
           <TabPanel>
-            <Friend />
+            <SimpleGrid columns={2} spacing={5}>
+              {recommendedFriends.map((friend) => (
+                <Friend key={friend.friendId} friend={friend} />
+              ))}
+            </SimpleGrid>
           </TabPanel>
         </TabPanels>
       </Tabs>
