@@ -12,12 +12,14 @@ import {
   Text,
   Button,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import About from "./About";
 import Feed from "./Feed";
 import Friends from "./Friends";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
 
-function ProfileMenu() {
+function ProfileMenu({ userData, friends }) {
   return (
     <>
       {/* <Container maxW="50%" bg="white" pr={0} pl={0}> */}
@@ -34,13 +36,13 @@ function ProfileMenu() {
           <Container maxW="50%" bg="white" minW="500px" padding={0}>
             <TabPanels>
               <TabPanel p={0}>
-                <About />
+                <About userData={userData} />
               </TabPanel>
               <TabPanel p={0}>
                 <Feed />
               </TabPanel>
               <TabPanel p={0}>
-                <Friends />
+                <Friends userData={userData} friends={friends} />
               </TabPanel>
             </TabPanels>
           </Container>

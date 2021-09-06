@@ -31,7 +31,7 @@ import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 
-function Header() {
+function Header({ userData }) {
   const { user, dispatch } = useContext(AuthContext);
   const history = useHistory();
 
@@ -92,10 +92,10 @@ function Header() {
               ml="1px"
               size="sm"
               name="Maxime Wets"
-              src="person/Max.jpg"
+              src={user.profilePicture || "person/noAvatar.jpg"}
             />
             <Text ml="4px" mr="8px">
-              Maxime
+              {user.username}
             </Text>
           </Flex>
         </Link>

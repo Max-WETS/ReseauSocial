@@ -24,6 +24,14 @@ const AuthReducer = (state, action) => {
         isFetching: false,
         error: false,
       };
+    case "FRIENDS_UPDATE":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          userFriends: action.payload,
+        },
+      };
     default:
       return state;
   }

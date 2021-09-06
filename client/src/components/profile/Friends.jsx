@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Container,
   Box,
@@ -19,8 +19,10 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import Friend from "./Friend";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
 
-function Friends() {
+function Friends({ friends }) {
   return (
     <Container w="600px" paddingTop="10px" pr={0} pl={0}>
       <Grid

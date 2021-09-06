@@ -10,10 +10,12 @@ import {
   Box,
   useMediaQuery,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { AiFillCamera } from "react-icons/ai";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
 
-function ProfilePics() {
+function ProfilePics({ userData }) {
   const [isLargerThan900] = useMediaQuery("(min-width: 900px)");
 
   return (
@@ -27,7 +29,7 @@ function ProfilePics() {
             h="350px"
             w="900px"
             objectFit="cover"
-            src="cover/SaintMichel-cover.jpg"
+            src="cover/nocover.svg"
             alt="cover picture"
             borderBottomRadius="5px"
           />
@@ -47,8 +49,8 @@ function ProfilePics() {
                   zIndex={0}
                   w="150px"
                   h="150px"
-                  name="Maxime Wets"
-                  src="person/Max.jpg"
+                  name={userData.username}
+                  src={userData.profilePicture || "person/noAvatar.png"}
                   cursor="pointer"
                   border="white 2px solid"
                 />
@@ -100,7 +102,7 @@ function ProfilePics() {
           </Center>
           <Center position="relative" top="-55px">
             <Text fontSize="28px" fontWeight="bold">
-              Maxime Wets
+              {userData.username}
             </Text>
           </Center>
         </Container>
