@@ -32,6 +32,24 @@ const AuthReducer = (state, action) => {
           userFriends: action.payload,
         },
       };
+    case "ADD_FRIEND":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          userFriends: [...state.user.userFriends, action.payload],
+        },
+      };
+    case "REMOVE_FRIEND":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          userFriends: state.user.userFriends.filter(
+            (friend) => friend.friendId !== action.payload
+          ),
+        },
+      };
     default:
       return state;
   }

@@ -36,6 +36,8 @@ function Profile() {
           console.log(status);
           if (status === "confirmé") {
             setProfileUserStatus("friend");
+          } else if (status === "invitation en cours") {
+            setProfileUserStatus("friend request sent");
           } else {
             setProfileUserStatus("pending");
           }

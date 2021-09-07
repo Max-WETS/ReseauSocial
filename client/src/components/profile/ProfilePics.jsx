@@ -18,9 +18,11 @@ import { IoPersonAddSharp } from "react-icons/io5";
 import { BsThreeDots } from "react-icons/bs";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
+const requestUtils = require("../../request.utils");
 
 function ProfilePics({ userData, profileUserStatus }) {
   const [isLargerThan900] = useMediaQuery("(min-width: 900px)");
+  const { user, dispatch } = useContext(AuthContext);
   const PF = "http://localhost:3000/";
 
   return (
@@ -151,6 +153,28 @@ function ProfilePics({ userData, profileUserStatus }) {
                           </HStack>
                         </Button>
                       );
+                    case "friend request sent":
+                      return (
+                        <Button
+                          bg="red.200"
+                          w="80px"
+                          h="25px"
+                          position="relative"
+                          top="-45px"
+                          alignItems="center"
+                          justifyContent="center"
+                          textAlign="center"
+                          onClick={requestUtils.handleClickRemove(
+                            user,
+                            userData,
+                            dispatch
+                          )}
+                        >
+                          <HStack spacing={0}>
+                            <Text>Cancel</Text>
+                          </HStack>
+                        </Button>
+                      );
                     case "notFriend":
                       return (
                         <Button
@@ -162,6 +186,11 @@ function ProfilePics({ userData, profileUserStatus }) {
                           alignItems="center"
                           justifyContent="center"
                           textAlign="center"
+                          onClick={requestUtils.handleClickAdd(
+                            user,
+                            userData,
+                            dispatch
+                          )}
                         >
                           <HStack spacing={1}>
                             <Text>Add</Text>
