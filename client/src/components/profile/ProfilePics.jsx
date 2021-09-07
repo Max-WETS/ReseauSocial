@@ -9,13 +9,17 @@ import {
   HStack,
   Box,
   useMediaQuery,
+  SimpleGrid,
+  Button,
 } from "@chakra-ui/react";
 import React, { useContext, useState, useEffect } from "react";
-import { AiFillCamera } from "react-icons/ai";
+import { AiFillCamera, AiOutlineCheck } from "react-icons/ai";
+import { IoPersonAddSharp } from "react-icons/io5";
+import { BsThreeDots } from "react-icons/bs";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 
-function ProfilePics({ userData }) {
+function ProfilePics({ userData, profileUserStatus }) {
   const [isLargerThan900] = useMediaQuery("(min-width: 900px)");
   const PF = "http://localhost:3000/";
 
@@ -101,11 +105,77 @@ function ProfilePics({ userData }) {
               )}
             </VStack>
           </Center>
-          <Center position="relative" top="-55px">
-            <Text fontSize="28px" fontWeight="bold">
-              {userData.username}
-            </Text>
-          </Center>
+          <SimpleGrid columns={3} spacing={0}>
+            <Box></Box>
+            <Center position="relative" top="-55px">
+              <Text fontSize="28px" fontWeight="bold">
+                {userData.username}
+              </Text>
+            </Center>
+            <Box>
+              <Center>
+                {(() => {
+                  switch (profileUserStatus) {
+                    case "friend":
+                      return (
+                        <Button
+                          bg="blue.300"
+                          w="65px"
+                          h="25px"
+                          position="relative"
+                          top="-45px"
+                          alignItems="center"
+                          justifyContent="center"
+                          textAlign="center"
+                        >
+                          <HStack spacing={0}>
+                            <Text>Friend</Text>
+                            <AiOutlineCheck />
+                          </HStack>
+                        </Button>
+                      );
+                    case "pending":
+                      return (
+                        <Button
+                          bg="blue.300"
+                          w="80px"
+                          h="25px"
+                          position="relative"
+                          top="-45px"
+                          alignItems="center"
+                          justifyContent="center"
+                          textAlign="center"
+                        >
+                          <HStack spacing={0}>
+                            <Text>Pending...</Text>
+                          </HStack>
+                        </Button>
+                      );
+                    case "notFriend":
+                      return (
+                        <Button
+                          bg="gray.100"
+                          w="70px"
+                          h="25px"
+                          position="relative"
+                          top="-45px"
+                          alignItems="center"
+                          justifyContent="center"
+                          textAlign="center"
+                        >
+                          <HStack spacing={1}>
+                            <Text>Add</Text>
+                            <IoPersonAddSharp />
+                          </HStack>
+                        </Button>
+                      );
+                    default:
+                      return null;
+                  }
+                })()}
+              </Center>
+            </Box>
+          </SimpleGrid>
         </Container>
       </Box>
     </>

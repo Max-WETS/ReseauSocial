@@ -41,7 +41,7 @@ function SearchBar() {
         return user.username.match(regex);
       });
     }
-    console.log("matches", matches);
+    //console.log("matches", matches);
     setSuggestions(matches);
     setText(text);
   };

@@ -11,15 +11,43 @@ function Profile() {
   const [userData, setUserData] = useState({});
   const [friends, setFriends] = useState(user.userFriends);
   const userId = useParams().userId;
+  const isUserProfile = user.userId === userId;
+  const [profileUserStatus, setProfileUserStatus] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
       const res = await axios.get(`/users/${userId}`);
-      console.log(res.data);
       setUserData(res.data);
     };
+
     fetchUserData();
   }, [userId]);
+
+  useEffect(() => {
+    const checkProfileUser = () => {
+      if (!isUserProfile) {
+        const friendsList = user.userFriends;
+        const userFriendList = friendsList.filter(
+          (friend) => friend.friendId === userData._id
+        );
+        const userFriend = userFriendList[0];
+        if (userFriend !== undefined) {
+          const status = userFriend.status;
+          console.log(status);
+          if (status === "confirmé") {
+            setProfileUserStatus("friend");
+          } else {
+            setProfileUserStatus("pending");
+          }
+        } else {
+          setProfileUserStatus("notFriend");
+        }
+      } else {
+        setProfileUserStatus(null);
+      }
+    };
+    checkProfileUser();
+  }, [userId, isUserProfile, user.userFriends, userData._id]);
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -41,19 +69,24 @@ function Profile() {
           friendsDataList.push(friendFinal);
         }
         setFriends(friendsDataList);
-        dispatch({ type: "FRIENDS_UPDATE", payload: friendsDataList });
+        if (isUserProfile)
+          dispatch({ type: "FRIENDS_UPDATE", payload: friendsDataList });
       } catch (err) {
         console.log(err);
       }
     };
     fetchFriends();
-  }, [userId, dispatch]);
+  }, [userId, dispatch, isUserProfile]);
 
   return (
     <>
       <Header userData={userData} />
-      <ProfilePics userData={userData} />
-      <ProfileMenu userData={userData} friends={friends} />
+      <ProfilePics userData={userData} profileUserStatus={profileUserStatus} />
+      <ProfileMenu
+        userData={userData}
+        friends={friends}
+        isUserProfile={isUserProfile}
+      />
     </>
   );
 }

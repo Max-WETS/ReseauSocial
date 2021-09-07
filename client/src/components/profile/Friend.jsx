@@ -11,7 +11,7 @@ import {
 import React from "react";
 import { HiUserRemove } from "react-icons/hi";
 
-function Friend({ friend }) {
+function Friend({ friend, isUserProfile }) {
   const PF = "http://localhost:3000/";
 
   return (
@@ -36,79 +36,81 @@ function Friend({ friend }) {
       </HStack>
       <Spacer />
       {(() => {
-        switch (friend.status) {
-          case "invitation en cours":
-            return (
-              <VStack>
-                <Button
-                  fontSize="12px"
-                  fontWeight="600"
-                  color="white"
-                  bg="blue.400"
-                  w="45px"
+        if (isUserProfile) {
+          switch (friend.status) {
+            case "en attente de confirmation":
+              return (
+                <VStack>
+                  <Button
+                    fontSize="12px"
+                    fontWeight="600"
+                    color="white"
+                    bg="blue.400"
+                    w="45px"
+                    h="25px"
+                    p={3}
+                    borderRadius="50%"
+                  >
+                    <Text>Accept</Text>
+                  </Button>
+                  <Button
+                    fontSize="12px"
+                    fontWeight="600"
+                    color="white"
+                    bg="red.400"
+                    w="45px"
+                    h="25px"
+                    p={3}
+                    borderRadius="50%"
+                  >
+                    <Text>Ignore</Text>
+                  </Button>
+                </VStack>
+              );
+            case "recommandé":
+              return (
+                <VStack>
+                  <Button
+                    fontSize="12px"
+                    fontWeight="600"
+                    color="white"
+                    bg="blue.400"
+                    w="45px"
+                    h="25px"
+                    p={3}
+                    borderRadius="50%"
+                  >
+                    <Text>Invite</Text>
+                  </Button>
+                  <Button
+                    fontSize="12px"
+                    fontWeight="600"
+                    color="white"
+                    bg="red.400"
+                    w="45px"
+                    h="25px"
+                    p={3}
+                    borderRadius="50%"
+                  >
+                    <Text>Ignore</Text>
+                  </Button>
+                </VStack>
+              );
+            default:
+              return (
+                <Flex
+                  bg="gray.100"
+                  cursor="pointer"
+                  w="25px"
                   h="25px"
-                  p={3}
                   borderRadius="50%"
+                  alignItems="center"
+                  justifyContent="center"
                 >
-                  <Text>Accept</Text>
-                </Button>
-                <Button
-                  fontSize="12px"
-                  fontWeight="600"
-                  color="white"
-                  bg="red.400"
-                  w="45px"
-                  h="25px"
-                  p={3}
-                  borderRadius="50%"
-                >
-                  <Text>Ignore</Text>
-                </Button>
-              </VStack>
-            );
-          case "recommandé":
-            return (
-              <VStack>
-                <Button
-                  fontSize="12px"
-                  fontWeight="600"
-                  color="white"
-                  bg="blue.400"
-                  w="45px"
-                  h="25px"
-                  p={3}
-                  borderRadius="50%"
-                >
-                  <Text>Invite</Text>
-                </Button>
-                <Button
-                  fontSize="12px"
-                  fontWeight="600"
-                  color="white"
-                  bg="red.400"
-                  w="45px"
-                  h="25px"
-                  p={3}
-                  borderRadius="50%"
-                >
-                  <Text>Ignore</Text>
-                </Button>
-              </VStack>
-            );
-          default:
-            return (
-              <Flex
-                bg="gray.100"
-                cursor="pointer"
-                w="25px"
-                h="25px"
-                borderRadius="50%"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <HiUserRemove />
-              </Flex>
-            );
+                  <HiUserRemove />
+                </Flex>
+              );
+          }
         }
       })()}
     </Flex>

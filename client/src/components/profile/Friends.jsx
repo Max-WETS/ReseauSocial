@@ -22,14 +22,15 @@ import Friend from "./Friend";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 
-function Friends({ friends }) {
+function Friends({ friends, userData, isUserProfile }) {
   const { user } = useContext(AuthContext);
-  const friendsList = user.userFriends;
 
   const confirmedFriends =
     friends.filter((friend) => friend.status === "confirmé") || null;
   const waitingFriends =
-    friends.filter((friend) => friend.status === "invitation en cours") || null;
+    friends.filter(
+      (friend) => friend.status === "en attente de confirmation"
+    ) || null;
   const recommendedFriends =
     friends.filter((friend) => friend.status === "recommandé") || null;
 
@@ -65,21 +66,33 @@ function Friends({ friends }) {
           <TabPanel>
             <SimpleGrid columns={2} spacing={5}>
               {confirmedFriends.map((friend) => (
-                <Friend key={friend.friendId} friend={friend} />
+                <Friend
+                  key={friend.friendId}
+                  friend={friend}
+                  isUserProfile={isUserProfile}
+                />
               ))}
             </SimpleGrid>
           </TabPanel>
           <TabPanel>
             <SimpleGrid columns={2} spacing={5}>
               {waitingFriends.map((friend) => (
-                <Friend key={friend.friendId} friend={friend} />
+                <Friend
+                  key={friend.friendId}
+                  friend={friend}
+                  isUserProfile={isUserProfile}
+                />
               ))}
             </SimpleGrid>
           </TabPanel>
           <TabPanel>
             <SimpleGrid columns={2} spacing={5}>
               {recommendedFriends.map((friend) => (
-                <Friend key={friend.friendId} friend={friend} />
+                <Friend
+                  key={friend.friendId}
+                  friend={friend}
+                  isUserProfile={isUserProfile}
+                />
               ))}
             </SimpleGrid>
           </TabPanel>

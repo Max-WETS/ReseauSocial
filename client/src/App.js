@@ -31,7 +31,7 @@ function App() {
           <Register />
         </Route>
         <Route exact path="/login">
-          {user ? <Redirect to="/" /> : <Login />}
+          {user ? <Redirect to={`/profile/${user.userId}`} /> : <Login />}
         </Route>
       </Switch>
     </Router>
