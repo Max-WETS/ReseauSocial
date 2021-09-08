@@ -13,9 +13,10 @@ import { HiUserRemove } from "react-icons/hi";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 
-function Friend({ friend, isUserProfile, addedFriend, setAddedFriend }) {
+function Friend({ friend, isUserProfile }) {
   const PF = "http://localhost:3000/";
   const { user, dispatch } = useContext(AuthContext);
+  console.log(PF);
 
   const handleClickAddRecommended = async () => {
     try {
@@ -34,7 +35,6 @@ function Friend({ friend, isUserProfile, addedFriend, setAddedFriend }) {
         userId: user.userId,
       });
       dispatch({ type: "REMOVE_FRIEND", payload: friend.friendId });
-      setAddedFriend(!addedFriend);
     } catch (err) {
       console.log(err);
     }
@@ -46,7 +46,6 @@ function Friend({ friend, isUserProfile, addedFriend, setAddedFriend }) {
         userId: user.userId,
       });
       dispatch({ type: "ACCEPT_FRIEND", payload: friend.friendId });
-      setAddedFriend(!addedFriend);
     } catch (err) {
       console.log(err);
     }
@@ -65,7 +64,7 @@ function Friend({ friend, isUserProfile, addedFriend, setAddedFriend }) {
         <Avatar
           size="md"
           name={friend.username || "unknown user"}
-          src={PF + friend.profilePicture || "person/noAvatar.jpg"}
+          src={PF + friend.profilePicture || PF + "person/noAvatar.jpg"}
           cursor="pointer"
         />
         <Text h="14px" fontWeight="500" position="relative" top="-5px">

@@ -19,13 +19,13 @@ function App() {
     <Router>
       <Switch>
         <Route exact path="/">
-          <Home />
+          {user ? <Home /> : <Redirect to="/register" />}
         </Route>
         <Route exact path="/profile/:userId">
-          <Profile />
+          {user ? <Profile /> : <Redirect to="/register" />}
         </Route>
         <Route exact path="/chat">
-          <Chat />
+          {user ? <Chat /> : <Redirect to="/register" />}
         </Route>
         <Route exact path="/register">
           <Register />

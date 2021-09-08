@@ -14,7 +14,6 @@ function Profile() {
   const userId = useParams().userId;
   const isUserProfile = user.userId === userId;
   const [profileUserStatus, setProfileUserStatus] = useState(null);
-  const [addedFriend, setAddedFriend] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -87,7 +86,7 @@ function Profile() {
       }
     };
     fetchFriends();
-  }, [userId, dispatch, isUserProfile, addedFriend, user.userFriends]);
+  }, [userId, dispatch, isUserProfile, user.userFriends]);
 
   if (userData === null || userData._id !== userId) {
     return <div>Chargement du profil...</div>;
@@ -101,8 +100,6 @@ function Profile() {
         userData={userData}
         friends={friends}
         isUserProfile={isUserProfile}
-        addedFriend={addedFriend}
-        setAddedFriend={setAddedFriend}
       />
     </>
   );
