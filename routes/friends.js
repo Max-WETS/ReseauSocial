@@ -1,6 +1,6 @@
 const FriendList = require("../models/FriendList");
 const router = require("express").Router();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const friendController = require("../controllers/friendController");
 
 // get friends
