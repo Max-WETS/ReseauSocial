@@ -18,12 +18,41 @@ import { IoPersonAddSharp } from "react-icons/io5";
 import { BsThreeDots } from "react-icons/bs";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
-const requestUtils = require("../../request.utils");
+//const requestUtils = require("../../request.utils");
 
 function ProfilePics({ userData, profileUserStatus }) {
   const [isLargerThan900] = useMediaQuery("(min-width: 900px)");
   const { user, dispatch } = useContext(AuthContext);
   const PF = "http://localhost:3000/";
+
+  const handleClickAdd = async () => {
+    try {
+      await axios.post(`/friends/${userData._id}/add`, { userId: user.userId });
+      const res = await axios.get(`/friends/${user.userId}`);
+      const friendsList = res.data;
+      const newFriendArray = friendsList.filter(
+        (friend) => friend.friendId === userData._id
+      );
+      const newFriend = newFriendArray[0];
+      newFriend["username"] = userData.username;
+      newFriend["profilePicture"] = userData.profilePicture;
+
+      dispatch({ type: "ADD_FRIEND", payload: newFriend });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleClickRemove = async () => {
+    try {
+      await axios.put(`/friends/${userData._id}/remove`, {
+        userId: user.userId,
+      });
+      dispatch({ type: "REMOVE_FRIEND", payload: userData._id });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <>
@@ -164,11 +193,7 @@ function ProfilePics({ userData, profileUserStatus }) {
                           alignItems="center"
                           justifyContent="center"
                           textAlign="center"
-                          onClick={requestUtils.handleClickRemove(
-                            user,
-                            userData,
-                            dispatch
-                          )}
+                          onClick={handleClickRemove}
                         >
                           <HStack spacing={0}>
                             <Text>Cancel</Text>
@@ -186,11 +211,7 @@ function ProfilePics({ userData, profileUserStatus }) {
                           alignItems="center"
                           justifyContent="center"
                           textAlign="center"
-                          onClick={requestUtils.handleClickAdd(
-                            user,
-                            userData,
-                            dispatch
-                          )}
+                          onClick={handleClickAdd}
                         >
                           <HStack spacing={1}>
                             <Text>Add</Text>

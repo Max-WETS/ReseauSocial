@@ -50,6 +50,20 @@ const AuthReducer = (state, action) => {
           ),
         },
       };
+    case "ACCEPT_FRIEND":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          userFriends: state.user.userFriends.map((friend) => {
+            const rFriend = friend;
+            if (rFriend.friendId === action.payload) {
+              rFriend.status = "confirmé";
+            }
+            return rFriend;
+          }),
+        },
+      };
     default:
       return state;
   }

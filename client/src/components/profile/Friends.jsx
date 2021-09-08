@@ -22,8 +22,15 @@ import Friend from "./Friend";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 
-function Friends({ friends, userData, isUserProfile }) {
+function Friends({
+  friends,
+  userData,
+  isUserProfile,
+  addedFriend,
+  setAddedFriend,
+}) {
   const { user } = useContext(AuthContext);
+  const [state, setState] = useState(true);
 
   const confirmedFriends =
     friends.filter((friend) => friend.status === "confirmé") || null;
@@ -70,6 +77,8 @@ function Friends({ friends, userData, isUserProfile }) {
                   key={friend.friendId}
                   friend={friend}
                   isUserProfile={isUserProfile}
+                  addedFriend={addedFriend}
+                  setAddedFriend={setAddedFriend}
                 />
               ))}
             </SimpleGrid>
@@ -81,6 +90,8 @@ function Friends({ friends, userData, isUserProfile }) {
                   key={friend.friendId}
                   friend={friend}
                   isUserProfile={isUserProfile}
+                  addedFriend={addedFriend}
+                  setAddedFriend={setAddedFriend}
                 />
               ))}
             </SimpleGrid>
@@ -92,6 +103,8 @@ function Friends({ friends, userData, isUserProfile }) {
                   key={friend.friendId}
                   friend={friend}
                   isUserProfile={isUserProfile}
+                  addedFriend={addedFriend}
+                  setAddedFriend={setAddedFriend}
                 />
               ))}
             </SimpleGrid>

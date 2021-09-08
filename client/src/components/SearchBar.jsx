@@ -20,6 +20,7 @@ function SearchBar() {
   const [text, setText] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const PF = "http://localhost:3000/";
+  const pathname = "";
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -44,6 +45,13 @@ function SearchBar() {
     //console.log("matches", matches);
     setSuggestions(matches);
     setText(text);
+  };
+
+  const refreshPage = () => {
+    setTimeout(() => {
+      window.location.reload(false);
+    }, 5);
+    console.log("page to reload");
   };
 
   return (

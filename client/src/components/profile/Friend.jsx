@@ -8,11 +8,49 @@ import {
   Spacer,
   Button,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useContext } from "react";
 import { HiUserRemove } from "react-icons/hi";
+import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
 
-function Friend({ friend, isUserProfile }) {
+function Friend({ friend, isUserProfile, addedFriend, setAddedFriend }) {
   const PF = "http://localhost:3000/";
+  const { user, dispatch } = useContext(AuthContext);
+
+  const handleClickAddRecommended = async () => {
+    try {
+      await axios.post(`/friends/${friend.friendId}/add`, {
+        userId: user.userId,
+      });
+      dispatch({ type: "ADD_RECOMMENDED_FRIEND", payload: friend.friendId });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleClickRemove = async () => {
+    try {
+      await axios.put(`/friends/${friend.friendId}/remove`, {
+        userId: user.userId,
+      });
+      dispatch({ type: "REMOVE_FRIEND", payload: friend.friendId });
+      setAddedFriend(!addedFriend);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleClickAccept = async () => {
+    try {
+      await axios.put(`/friends/${friend.friendId}/accept`, {
+        userId: user.userId,
+      });
+      dispatch({ type: "ACCEPT_FRIEND", payload: friend.friendId });
+      setAddedFriend(!addedFriend);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <Flex
@@ -50,6 +88,7 @@ function Friend({ friend, isUserProfile }) {
                     h="25px"
                     p={3}
                     borderRadius="50%"
+                    onClick={handleClickAccept}
                   >
                     <Text>Accept</Text>
                   </Button>
@@ -62,6 +101,7 @@ function Friend({ friend, isUserProfile }) {
                     h="25px"
                     p={3}
                     borderRadius="50%"
+                    onClick={handleClickRemove}
                   >
                     <Text>Ignore</Text>
                   </Button>
@@ -106,6 +146,7 @@ function Friend({ friend, isUserProfile }) {
                   borderRadius="50%"
                   alignItems="center"
                   justifyContent="center"
+                  onClick={handleClickRemove}
                 >
                   <HiUserRemove />
                 </Flex>

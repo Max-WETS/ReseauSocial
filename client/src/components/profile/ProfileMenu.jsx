@@ -23,7 +23,7 @@ function ProfileMenu({ userData, friends, isUserProfile }) {
   return (
     <>
       {/* <Container maxW="50%" bg="white" pr={0} pl={0}> */}
-      <Tabs isFitted variant="enclosed">
+      <Tabs defaultIndex={1} isFitted variant="enclosed">
         <Container maxW="55%">
           <TabList>
             <Tab zIndex="8">About</Tab>
