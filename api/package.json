@@ -1,5 +1,5 @@
 {
-  "name": "_depot",
+  "name": "maxwebs",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -23,5 +23,8 @@
     "nodemon": "^2.0.12",
     "path": "^0.12.7",
     "validator": "^13.6.0"
+  },
+  "engines": {
+    "node": "^14.15.5"
   }
 }
