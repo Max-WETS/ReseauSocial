@@ -31,16 +31,16 @@ import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import SearchBar from "./SearchBar";
 import axios from "axios";
-import {axiosInstance} from "../config"
+import { axiosInstance } from "../config";
 
 function Header({ userData }) {
   const { user, dispatch } = useContext(AuthContext);
   const history = useHistory();
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const PF = "http://localhost:3000/";
 
   const handleClick = () => {
     const path = "/login";
-    axiosInstance.get("/auth/logout");
+    axios.get("/auth/logout");
     dispatch({ type: "LOGOUT" });
     history.push(path);
   };

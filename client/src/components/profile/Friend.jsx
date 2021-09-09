@@ -11,11 +11,11 @@ import {
 import React, { useContext } from "react";
 import { HiUserRemove } from "react-icons/hi";
 import axios from "axios";
-import {axiosInstance} from "../../config"
+import { axiosInstance } from "../../config";
 import { AuthContext } from "../../context/AuthContext";
 
 function Friend({ friend, isUserProfile }) {
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const PF = "http://localhost:3000/";
   const { user, dispatch } = useContext(AuthContext);
   console.log(PF);
 

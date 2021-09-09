@@ -5,7 +5,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
-import {axiosInstance} from "../config"
+import { axiosInstance } from "../config";
 import { arraysEqual } from "../request.utils";
 
 function Profile() {

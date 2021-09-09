@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useHistory } from "react-router";
 import axios from "axios";
-import {axiosInstance} from "../config"
+import { axiosInstance } from "../config";
 import {
   CircularProgress,
   CircularProgressLabel,

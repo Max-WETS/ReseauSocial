@@ -12,7 +12,7 @@ import {
 import { Link } from "react-router-dom";
 import { SearchIcon } from "@chakra-ui/icons";
 import axios from "axios";
-import {axiosInstance} from "../config"
+import { axiosInstance } from "../config";
 import { AuthContext } from "../context/AuthContext";
 
 function SearchBar() {
@@ -20,7 +20,7 @@ function SearchBar() {
   const [users, setUsers] = useState([]);
   const [text, setText] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const PF = "http://localhost:3000/";
 
   useEffect(() => {
     const fetchUsers = async () => {

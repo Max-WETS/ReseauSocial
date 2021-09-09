@@ -18,17 +18,20 @@ import { IoPersonAddSharp } from "react-icons/io5";
 import { BsThreeDots } from "react-icons/bs";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
+import { axiosInstance } from "../../config";
 //const requestUtils = require("../../request.utils");
 
 function ProfilePics({ userData, profileUserStatus }) {
   const [isLargerThan900] = useMediaQuery("(min-width: 900px)");
   const { user, dispatch } = useContext(AuthContext);
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const PF = "http://localhost:3000/";
 
   const handleClickAdd = async () => {
     try {
-      await axios.post(`/friends/${userData._id}/add`, { userId: user.userId });
-      const res = await axios.get(`/friends/${user.userId}`);
+      await axiosInstance.post(`/friends/${userData._id}/add`, {
+        userId: user.userId,
+      });
+      const res = await axiosInstance.get(`/friends/${user.userId}`);
       const friendsList = res.data;
       const newFriendArray = friendsList.filter(
         (friend) => friend.friendId === userData._id
@@ -45,7 +48,7 @@ function ProfilePics({ userData, profileUserStatus }) {
 
   const handleClickRemove = async () => {
     try {
-      await axios.put(`/friends/${userData._id}/remove`, {
+      await axiosInstance.put(`/friends/${userData._id}/remove`, {
         userId: user.userId,
       });
       dispatch({ type: "REMOVE_FRIEND", payload: userData._id });
