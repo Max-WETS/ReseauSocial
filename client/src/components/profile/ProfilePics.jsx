@@ -28,8 +28,10 @@ function ProfilePics({ userData, profileUserStatus }) {
 
   const handleClickAdd = async () => {
     try {
-      await axios.post(`/friends/${userData._id}/add`, { userId: user.userId });
-      const res = await axios.get(`/friends/${user.userId}`);
+      await axiosInstance.post(`/friends/${userData._id}/add`, {
+        userId: user.userId,
+      });
+      const res = await axiosInstance.get(`/friends/${user.userId}`);
       const friendsList = res.data;
       const newFriendArray = friendsList.filter(
         (friend) => friend.friendId === userData._id
@@ -46,7 +48,7 @@ function ProfilePics({ userData, profileUserStatus }) {
 
   const handleClickRemove = async () => {
     try {
-      await axios.put(`/friends/${userData._id}/remove`, {
+      await axiosInstance.put(`/friends/${userData._id}/remove`, {
         userId: user.userId,
       });
       dispatch({ type: "REMOVE_FRIEND", payload: userData._id });

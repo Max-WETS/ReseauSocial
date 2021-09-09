@@ -25,7 +25,7 @@ function SearchBar() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("/users");
+        const res = await axiosInstance.get("/users");
         setUsers(res.data);
       } catch (err) {
         console.log(err);

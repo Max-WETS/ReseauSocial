@@ -21,7 +21,7 @@ function Friend({ friend, isUserProfile }) {
 
   const handleClickAddRecommended = async () => {
     try {
-      await axios.post(`/friends/${friend.friendId}/add`, {
+      await axiosInstance.post(`/friends/${friend.friendId}/add`, {
         userId: user.userId,
       });
       dispatch({ type: "ADD_RECOMMENDED_FRIEND", payload: friend.friendId });
@@ -32,7 +32,7 @@ function Friend({ friend, isUserProfile }) {
 
   const handleClickRemove = async () => {
     try {
-      await axios.put(`/friends/${friend.friendId}/remove`, {
+      await axiosInstance.put(`/friends/${friend.friendId}/remove`, {
         userId: user.userId,
       });
       dispatch({ type: "REMOVE_FRIEND", payload: friend.friendId });
@@ -43,7 +43,7 @@ function Friend({ friend, isUserProfile }) {
 
   const handleClickAccept = async () => {
     try {
-      await axios.put(`/friends/${friend.friendId}/accept`, {
+      await axiosInstance.put(`/friends/${friend.friendId}/accept`, {
         userId: user.userId,
       });
       dispatch({ type: "ACCEPT_FRIEND", payload: friend.friendId });

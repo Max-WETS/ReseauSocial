@@ -5,6 +5,7 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
+import PrivateRoute from "./components/PrivateRoute";
 import Chat from "./pages/Chat";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
@@ -18,15 +19,9 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route exact path="/">
-          {user ? <Home /> : <Redirect to="/register" />}
-        </Route>
-        <Route exact path="/profile/:userId">
-          {user ? <Profile /> : <Redirect to="/register" />}
-        </Route>
-        <Route exact path="/chat">
-          {user ? <Chat /> : <Redirect to="/register" />}
-        </Route>
+        <PrivateRoute exact path="/" component={Home} />
+        <PrivateRoute exact path="/profile/:userId" component={Profile} />
+        <PrivateRoute exact path="/chat" component={Chat} />
         <Route exact path="/register">
           <Register />
         </Route>
