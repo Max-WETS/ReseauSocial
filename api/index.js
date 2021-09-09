@@ -33,25 +33,16 @@ app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "public/images");
-  },
-  filename: (req, file, cb) => {
-    cb(null, req.body.name);
-  },
-});
-
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/posts", postRoute);
 app.use("/api/friends", friendsRoute);
 
 // only intended for heroku build
-app.use(express.static(path.join(__dirname, "/client/build")));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/client/build", "index.html"));
-});
+// app.use(express.static(path.join(__dirname, "/client/build")));
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "/client/build", "index.html"));
+// });
 
 app.listen(process.env.PORT || 5000, () => {
   console.log("Backend server running");
