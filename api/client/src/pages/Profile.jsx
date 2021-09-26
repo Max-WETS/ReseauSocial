@@ -18,7 +18,7 @@ function Profile() {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const res = await axios.get(`/users/${userId}`);
+      const res = await axiosInstance.get(`/users/${userId}`);
       setUserData(res.data);
     };
 
@@ -57,8 +57,8 @@ function Profile() {
     const fetchFriends = async () => {
       try {
         const friendsDataList = [];
-        const users = await axios.get("/users");
-        const friendsList = await axios.get(`/friends/${userId}`);
+        const users = await axiosInstance.get("/users");
+        const friendsList = await axiosInstance.get(`/friends/${userId}`);
         const friendsListData = friendsList.data;
 
         for (let friend of friendsListData) {

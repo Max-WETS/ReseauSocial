@@ -39,8 +39,8 @@ function Header({ userData }) {
   const PF = "http://localhost:3000/";
 
   const handleClick = () => {
-    const path = "/login";
-    axios.get("/auth/logout");
+    const path = "login";
+    axiosInstance.get("/auth/logout");
     dispatch({ type: "LOGOUT" });
     history.push(path);
   };

@@ -10,6 +10,7 @@ const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
 const friendsRoute = require("./routes/friends");
+const conversationsRoute = require("./routes/conversations");
 const router = express.Router();
 const path = require("path");
 
@@ -39,12 +40,13 @@ app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/posts", postRoute);
 app.use("/api/friends", friendsRoute);
+app.use("/api/conversations", conversationsRoute);
 
 // only intended for heroku build
-// app.use(express.static(path.join(__dirname, "/client/build")));
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "/client/build", "index.html"));
-// });
+app.use(express.static(path.join(__dirname, "/client/build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/client/build", "index.html"));
+});
 
 app.listen(process.env.PORT || 5000, () => {
   console.log("Backend server running");
