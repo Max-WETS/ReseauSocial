@@ -13,10 +13,11 @@ import { RiSendPlaneFill } from "react-icons/ri";
 import { axiosInstance } from "../../config";
 import Message from "./Message";
 
-function ChatWindow({ currentChat, user }) {
+function ChatWindow({ currentChat, user, socket }) {
   const PF = "http://localhost:3000/";
   const [friend, setFriend] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
 
   useEffect(() => {
     if (currentChat) {
@@ -32,21 +33,41 @@ function ChatWindow({ currentChat, user }) {
       };
       fetchFriendData();
     }
-  }, [currentChat, user.userId, currentChat.messages]);
+  }, [currentChat, user.userId, currentChat?.messages]);
 
   useEffect(() => {
-    const getMessages = async () => {
-      try {
-        const res = await axiosInstance.get(
-          "/conversations/chat-id/" + currentChat?._id
-        );
-        setMessages(res.data.messages);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getMessages();
+    if (currentChat) {
+      const getMessages = async () => {
+        try {
+          const res = await axiosInstance.get(
+            "/conversations/chat-id/" + currentChat?._id
+          );
+          setMessages(res.data.messages);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      getMessages();
+    }
   }, [currentChat]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await axiosInstance.post(
+        `/conversations/${currentChat._id}/add`,
+        {
+          senderId: user.userId,
+          message: newMessage,
+        }
+      );
+      setMessages(res.data.messages);
+      setNewMessage("");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return currentChat ? (
     <VStack w="75%" minH="80vh" alignItems="stretch">
@@ -86,8 +107,16 @@ function ChatWindow({ currentChat, user }) {
         </Flex>
       </Flex>
       <HStack h="40px" w="100%" pl="10px">
-        <Input h="35px" w="80%" bg="gray.100" type="message" placeholder="Aa" />
-        <Button w="90px" h="35px" bg="blue.500">
+        <Input
+          h="35px"
+          w="80%"
+          bg="gray.100"
+          type="message"
+          placeholder="Aa"
+          onChange={(e) => setNewMessage(e.target.value)}
+          value={newMessage}
+        />
+        <Button w="90px" h="35px" bg="blue.500" onClick={handleSubmit}>
           <Box w="30px" mr="4px">
             <RiSendPlaneFill size="sm" color="white" />
           </Box>
