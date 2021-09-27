@@ -7,8 +7,13 @@ const ConversationSchema = new mongoose.Schema(
     },
     messages: [
       {
-        senderId: String,
-        message: String,
+        type: new mongoose.Schema(
+          {
+            senderId: String,
+            message: String,
+          },
+          { timestamps: true }
+        ),
       },
     ],
   },

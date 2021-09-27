@@ -11,11 +11,12 @@ import {
 import React, { useState, useEffect } from "react";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { axiosInstance } from "../../config";
+import Message from "./Message";
 
 function ChatWindow({ currentChat, user }) {
   const PF = "http://localhost:3000/";
   const [friend, setFriend] = useState(null);
-  const [messages, setMessages] = useState(currentChat.messages);
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     if (currentChat) {
@@ -31,7 +32,21 @@ function ChatWindow({ currentChat, user }) {
       };
       fetchFriendData();
     }
-  }, [currentChat, user.userId]);
+  }, [currentChat, user.userId, currentChat.messages]);
+
+  useEffect(() => {
+    const getMessages = async () => {
+      try {
+        const res = await axiosInstance.get(
+          "/conversations/chat-id/" + currentChat?._id
+        );
+        setMessages(res.data.messages);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getMessages();
+  }, [currentChat]);
 
   return currentChat ? (
     <VStack w="75%" minH="80vh" alignItems="stretch">
@@ -55,7 +70,21 @@ function ChatWindow({ currentChat, user }) {
           {friend?.username || "unknown user"}
         </Text>
       </Flex>
-      <Flex w="100%" minH="72vh"></Flex>
+      <Flex w="100%" minH="72vh">
+        <Flex flexDirection="column" justifyContent="space-between" w="100%">
+          <Box h="100%" overflowY="scroll" pr="10px">
+            {messages.map((m) => (
+              <Message
+                key={m._id}
+                message={m}
+                own={m.senderId === user.userId}
+                user={user}
+                friend={friend}
+              />
+            ))}
+          </Box>
+        </Flex>
+      </Flex>
       <HStack h="40px" w="100%" pl="10px">
         <Input h="35px" w="80%" bg="gray.100" type="message" placeholder="Aa" />
         <Button w="90px" h="35px" bg="blue.500">

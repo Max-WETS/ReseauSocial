@@ -46,8 +46,8 @@ function ChatLeftBar({
         receiverId: suggestion.friendId,
       });
       const res = await axiosInstance.get("/conversations/" + user.userId);
-      setConversations(res.data);
       setText("");
+      setConversations(res.data);
     } catch (err) {
       console.log(err);
     }
