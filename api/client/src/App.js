@@ -12,9 +12,6 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./context/AuthContext";
-import io from "socket.io-client";
-
-const socket = io("http://localhost:5000");
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -24,7 +21,7 @@ function App() {
       <Switch>
         <PrivateRoute exact path="/" component={Home} />
         <PrivateRoute exact path="/profile/:userId" component={Profile} />
-        <PrivateRoute exact path="/chat" component={Chat} socket={socket} />
+        <PrivateRoute exact path="/chat" component={Chat} />
         <Route exact path="/register">
           <Register />
         </Route>

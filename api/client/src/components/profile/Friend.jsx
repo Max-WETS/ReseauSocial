@@ -17,7 +17,6 @@ import { AuthContext } from "../../context/AuthContext";
 function Friend({ friend, isUserProfile }) {
   const PF = "http://localhost:3000/";
   const { user, dispatch } = useContext(AuthContext);
-  console.log(PF);
 
   const handleClickAddRecommended = async () => {
     try {

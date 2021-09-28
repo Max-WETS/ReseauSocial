@@ -12,12 +12,19 @@ import React, { useState, useEffect } from "react";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { axiosInstance } from "../../config";
 import Message from "./Message";
+import io from "socket.io-client";
 
-function ChatWindow({ currentChat, user, socket }) {
+const socket = io("http://localhost:5000");
+
+function ChatWindow({ currentChat, user }) {
   const PF = "http://localhost:3000/";
   const [friend, setFriend] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+
+  // socket.on("time", function (timeString) {
+  //   console.log("server time: " + timeString);
+  // });
 
   useEffect(() => {
     if (currentChat) {

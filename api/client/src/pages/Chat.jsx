@@ -6,16 +6,10 @@ import Header from "../components/Header";
 import { axiosInstance } from "../config";
 import { AuthContext } from "../context/AuthContext";
 
-function Chat({ socket }) {
+function Chat() {
   const { user } = useContext(AuthContext);
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
-
-  useEffect(() => {
-    socket.on("connection", (data) => {
-      console.log(data);
-    });
-  }, [socket]);
 
   useEffect(() => {
     const getConversations = async () => {
@@ -40,7 +34,7 @@ function Chat({ socket }) {
           currentChat={currentChat}
           setCurrentChat={setCurrentChat}
         />
-        <ChatWindow currentChat={currentChat} user={user} socket={socket} />
+        <ChatWindow currentChat={currentChat} user={user} />
       </HStack>
     </>
   );
