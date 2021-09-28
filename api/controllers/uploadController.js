@@ -25,4 +25,18 @@ module.exports.uploadPicture = async (req, res) => {
     req.file.stream,
     fs.createWriteStream(`${__dirname}/../client/public/person/${fileName}`)
   );
+
+  try {
+    await User.findByIdAndUpdate(
+      req.body.userId,
+      { $set: { profilePicture: "person/" + fileName } },
+      { new: true, upsert: true, setDefaultsOnInsert: true },
+      (err, docs) => {
+        if (!err) return res.send(docs);
+        else return res.status(500).send({ message: err });
+      }
+    );
+  } catch (err) {
+    return res.status(500).send({ message: err });
+  }
 };

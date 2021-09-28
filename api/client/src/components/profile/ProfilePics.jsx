@@ -11,7 +11,21 @@ import {
   useMediaQuery,
   SimpleGrid,
   Button,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
+  Input,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
 } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
 import React, { useContext, useState, useEffect } from "react";
 import { AiFillCamera, AiOutlineCheck } from "react-icons/ai";
 import { IoPersonAddSharp } from "react-icons/io5";
@@ -25,6 +39,26 @@ function ProfilePics({ userData, profileUserStatus }) {
   const [isLargerThan900] = useMediaQuery("(min-width: 900px)");
   const { user, dispatch } = useContext(AuthContext);
   const PF = "http://localhost:3000/";
+  const [file, setFile] = useState();
+
+  const handlePicture = async (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append("name", user.username);
+    data.append("userId", user.userId);
+    data.append("file", file);
+    console.log(data);
+
+    try {
+      await axiosInstance.post(`users/upload`, data);
+      dispatch({
+        type: "UPDATE_PROFILE_PIC",
+        payload: `person/${user.username}.jpg`,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleClickAdd = async () => {
     try {
@@ -96,18 +130,63 @@ function ProfilePics({ userData, profileUserStatus }) {
                   border="white 2px solid"
                 />
               </Circle>
-              <Circle
-                cursor="pointer"
-                maxW="30px"
-                bg="gray.100"
-                border="solid 3px lightgray"
-                zIndex={2}
-                position="relative"
-                top="-50px"
-                left="55px"
-              >
-                <AiFillCamera size="xs" />
-              </Circle>
+              <Popover placement="right-end" isLazy>
+                <PopoverTrigger>
+                  <Circle
+                    cursor="pointer"
+                    maxW="30px"
+                    bg="gray.100"
+                    border="solid 3px lightgray"
+                    zIndex={2}
+                    position="relative"
+                    top="-50px"
+                    left="55px"
+                  >
+                    <AiFillCamera size="xs" />
+                  </Circle>
+                </PopoverTrigger>
+                <PopoverContent zIndex={8}>
+                  <Formik>
+                    <Form onSubmit={handlePicture}>
+                      <FormLabel
+                        htmlFor="file"
+                        display="flex"
+                        flexDirection="column"
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <Input
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          pt="4px"
+                          mt="5px"
+                          type="file"
+                          id="file"
+                          name="file"
+                          accept=".jpg, .jpeg, .png"
+                          onChange={(e) => setFile(e.target.files[0])}
+                        />
+                        <Input
+                          margin="auto"
+                          mt="5px"
+                          mb="5px"
+                          w="80px"
+                          h="30px"
+                          bg="blue.400"
+                          _hover={{
+                            backgroundColor: "lightblue",
+                          }}
+                          cursor="pointer"
+                          color="white"
+                          type="submit"
+                          value="Send"
+                        />
+                      </FormLabel>
+                    </Form>
+                  </Formik>
+                </PopoverContent>
+              </Popover>
               {isLargerThan900 ? (
                 <HStack
                   borderRadius="md"
