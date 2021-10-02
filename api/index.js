@@ -1,5 +1,8 @@
 const express = require("express");
 const app = express();
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const httpServer = createServer(app);
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
@@ -50,24 +53,113 @@ app.use("/api/conversations", conversationsRoute);
 //   res.sendFile(path.join(__dirname, "/client/build", "index.html"));
 // });
 
-const server = app.listen(process.env.PORT || 5000, () => {
+httpServer.listen(process.env.PORT || 5000, () => {
   console.log("Backend server running".green);
 });
 
 // socket.io
-const io = socket(server, {
+const io = new Server(httpServer, {
   cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
+    origin: "http://localhost:3000",
   },
 });
 
-io.on("connection", (socket) => {
-  console.log("a user connected");
+const crypto = require("crypto");
+const randomId = () => crypto.randomBytes(8).toString("hex");
+const { InMemorySessionStore } = require("./sessionStore");
+const sessionStore = new InMemorySessionStore();
 
-  // setInterval(() => io.emit("time", new Date().toTimeString()), 10000);
+io.use((socket, next) => {
+  const sessionID = socket.handshake.auth.sessionID;
+  console.log("sessionID déjà sauvegardée: " + sessionID);
+
+  const MapIter = sessionStore.findAllSessions();
+  for (const [key, value] of MapIter) {
+    console.log(
+      `${key} = username: ${value.username}, userID: ${value.userID}`
+    );
+  }
+
+  if (sessionID) {
+    const session = sessionStore.findSession(sessionID);
+    console.log("session stockée: " + session);
+    if (session) {
+      console.log("session username: " + session.username);
+      socket.sessionID = sessionID;
+      socket.userID = session.userID;
+      socket.username = session.username;
+      next();
+    }
+  }
+
+  const username = socket.handshake.auth.username;
+  if (!username) {
+    return next(new Error("invalid username"));
+  }
+
+  socket.sessionID = randomId();
+  socket.userID = randomId();
+  socket.username = username;
+  next();
+});
+
+io.on("connection", (socket) => {
+  sessionStore.saveSession(socket.sessionID, {
+    userID: socket.userID,
+    username: socket.username,
+    connected: true,
+  });
+  console.log(
+    "sessionID à sauvegarder: " +
+      socket.sessionID +
+      ", session's username: " +
+      socket.username
+  );
+
+  socket.emit("session", {
+    sessionID: socket.sessionID,
+    userID: socket.userID,
+    username: socket.username,
+  });
+
+  socket.join(socket.userID);
+
+  const users = [];
+  for (let [id, socket] of io.of("/").sockets) {
+    users.push({
+      userID: id,
+      username: socket.username,
+    });
+  }
+  socket.emit("users", users);
+
+  socket.broadcast.emit("user connected", {
+    userID: socket.id,
+    username: socket.username,
+  });
 
   socket.on("disconnect", () => {
-    console.log("Client disconnected");
+    socket.on("disconnect", async () => {
+      const matchingSockets = await io.in(socket.userID).allSockets();
+      // console.log("matching sockets: " + matchingSockets);
+      const isDisconnected = matchingSockets.size === 0;
+      if (isDisconnected) {
+        // notify other users
+        socket.broadcast.emit("user disconnected", socket.userID);
+        // update the connection status of the session
+        sessionStore.saveSession(socket.sessionID, {
+          userID: socket.userID,
+          username: socket.username,
+          connected: false,
+        });
+        const session = sessionStore.findSession(sessionID);
+        console.log(
+          "session déconnectée: " +
+            session.sessionID +
+            ", statut de connexion: " +
+            session.connected
+        );
+      }
+    });
   });
 });
