@@ -73,8 +73,9 @@ io.use((socket, next) => {
   const sessionID = socket.handshake.auth.sessionID;
   console.log("sessionID déjà sauvegardée: " + sessionID);
 
-  const MapIter = sessionStore.findAllSessions();
-  for (const [key, value] of MapIter) {
+  const MapSessions = sessionStore.findAllSessions();
+  console.log("nbre de sessions enregistrées: " + MapSessions.size);
+  for (const [key, value] of MapSessions.entries()) {
     console.log(
       `${key} = username: ${value.username}, userID: ${value.userID}`
     );
@@ -96,9 +97,14 @@ io.use((socket, next) => {
   if (!username) {
     return next(new Error("invalid username"));
   }
+  const userID = socket.handshake.auth.userID;
+  console.log("socket.auth.userID: " + userID);
+  if (!username) {
+    return next(new Error("invalid userID"));
+  }
 
   socket.sessionID = randomId();
-  socket.userID = randomId();
+  socket.userID = userID;
   socket.username = username;
   next();
 });
@@ -124,42 +130,65 @@ io.on("connection", (socket) => {
 
   socket.join(socket.userID);
 
-  const users = [];
-  for (let [id, socket] of io.of("/").sockets) {
-    users.push({
-      userID: id,
-      username: socket.username,
-    });
-  }
+  let users = [];
+
+  const updateUsers = () => {
+    for (let [id, socket] of io.of("/").sockets) {
+      users.push({
+        userID: socket.userID,
+        username: socket.username,
+      });
+    }
+  };
+  updateUsers();
+
   socket.emit("users", users);
 
   socket.broadcast.emit("user connected", {
-    userID: socket.id,
+    userID: socket.userID,
     username: socket.username,
+    users: users,
   });
 
-  socket.on("disconnect", () => {
-    socket.on("disconnect", async () => {
-      const matchingSockets = await io.in(socket.userID).allSockets();
-      // console.log("matching sockets: " + matchingSockets);
-      const isDisconnected = matchingSockets.size === 0;
-      if (isDisconnected) {
-        // notify other users
-        socket.broadcast.emit("user disconnected", socket.userID);
-        // update the connection status of the session
-        sessionStore.saveSession(socket.sessionID, {
-          userID: socket.userID,
-          username: socket.username,
-          connected: false,
-        });
-        const session = sessionStore.findSession(sessionID);
-        console.log(
-          "session déconnectée: " +
-            session.sessionID +
-            ", statut de connexion: " +
-            session.connected
-        );
-      }
+  socket.on("private message", ({ message, to }) => {
+    socket.to(to).emit("private message", {
+      senderID: socket.userID,
+      message,
     });
+  });
+
+  socket.on("disconnect", async () => {
+    const matchingSockets = await io.in(socket.userID).allSockets();
+    console.log("nbre matching sockets: " + matchingSockets.size);
+    for (const entry of matchingSockets.entries()) {
+      console.log(entry);
+    }
+    const isDisconnected = matchingSockets.size === 0;
+    if (isDisconnected) {
+      // notify other users
+      users = users.filter((u) => u.userID !== socket.userID);
+      socket.broadcast.emit("user disconnected", {
+        userID: socket.userID,
+        username: socket.username,
+        users: users,
+      });
+      // update the connection status of the session
+      sessionStore.saveSession(socket.sessionID, {
+        userID: socket.userID,
+        username: socket.username,
+        connected: false,
+      });
+      const session = sessionStore.findSession(socket.sessionID);
+      console.log(
+        "session déconnectée: " +
+          socket.sessionID +
+          ", session's username: " +
+          session.username +
+          ", session's userID: " +
+          session.userID +
+          ", statut de connexion: " +
+          session.connected
+      );
+    }
   });
 });

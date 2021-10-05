@@ -72,6 +72,14 @@ const AuthReducer = (state, action) => {
           profilePicture: action.payload,
         },
       };
+    case "CONNECTED_USERS":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          connectedUsers: action.payload,
+        },
+      };
     default:
       return state;
   }

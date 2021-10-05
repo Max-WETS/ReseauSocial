@@ -19,7 +19,7 @@ class InMemorySessionStore extends SessionStore {
   }
 
   findAllSessions() {
-    return [...this.sessions.entries()];
+    return [...this.sessions];
   }
 }
 

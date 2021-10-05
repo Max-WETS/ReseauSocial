@@ -12,19 +12,22 @@ import React, { useState, useEffect } from "react";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { axiosInstance } from "../../config";
 import Message from "./Message";
-import io from "socket.io-client";
-
-const socket = io("http://localhost:5000");
+import socket from "../../socket";
 
 function ChatWindow({ currentChat, user }) {
   const PF = "http://localhost:3000/";
   const [friend, setFriend] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [isConnected, setIsConnected] = useState(false);
 
-  // socket.on("time", function (timeString) {
-  //   console.log("server time: " + timeString);
-  // });
+  useEffect(() => {
+    if (!friend) return;
+    console.log("chat window / connected users: " + user.connectedUsers.length);
+    for (let u of user.connectedUsers) {
+      console.log(u);
+    }
+  }, [friend, user.connectedUsers, isConnected]);
 
   useEffect(() => {
     if (currentChat) {
@@ -39,8 +42,12 @@ function ChatWindow({ currentChat, user }) {
         }
       };
       fetchFriendData();
+
+      if (!user.connectedUsers) return;
+      const connected = user.connectedUsers.find((u) => u.userID === friendId);
+      connected ? setIsConnected(true) : setIsConnected(false);
     }
-  }, [currentChat, user.userId, currentChat?.messages]);
+  }, [currentChat, user.userId, currentChat?.messages, user.connectedUsers]);
 
   useEffect(() => {
     if (currentChat) {
@@ -58,6 +65,22 @@ function ChatWindow({ currentChat, user }) {
     }
   }, [currentChat]);
 
+  useEffect(() => {
+    socket.on("private message", ({ senderID, message }) => {
+      const getNewMessage = async () => {
+        try {
+          const res = await axiosInstance.get(
+            `/conversations/chat-id/${currentChat?._id}`
+          );
+          setMessages(res.data.messages);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      getNewMessage();
+    });
+  }, [currentChat?._id]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -69,6 +92,14 @@ function ChatWindow({ currentChat, user }) {
           message: newMessage,
         }
       );
+
+      if (isConnected) {
+        socket.emit("private message", {
+          message: newMessage,
+          to: friend._id,
+        });
+      }
+
       setMessages(res.data.messages);
       setNewMessage("");
     } catch (err) {
@@ -96,6 +127,9 @@ function ChatWindow({ currentChat, user }) {
         />
         <Text ml="10px" mr="8px">
           {friend?.username || "unknown user"}
+        </Text>
+        <Text ml="2px" fontStyle="italic" fontSize="0.9rem" color="gray.400">
+          {isConnected ? "- online" : "- offline"}
         </Text>
       </Flex>
       <Flex w="100%" minH="72vh">
