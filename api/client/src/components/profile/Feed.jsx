@@ -1,18 +1,4 @@
-import {
-  VStack,
-  Box,
-  HStack,
-  Avatar,
-  Input,
-  Button,
-  Center,
-  Container,
-  Flex,
-  Text,
-} from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
-import { AiFillPicture } from "react-icons/ai";
-import { RiSendPlaneFill } from "react-icons/ri";
 import { axiosInstance } from "../../config";
 import { AuthContext } from "../../context/AuthContext";
 import Post from "./Post";

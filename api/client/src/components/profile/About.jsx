@@ -1,16 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import {
-  Container,
-  Text,
-  Box,
-  VStack,
-  HStack,
-  Spacer,
-  Flex,
-  Button,
-} from "@chakra-ui/react";
-import { AiFillEdit } from "react-icons/ai";
-import { AuthContext } from "../../context/AuthContext";
+import React, { useEffect, useState } from "react";
+import { Container, Text, Box, VStack, HStack } from "@chakra-ui/react";
 import { axiosInstance } from "../../config";
 import AboutField from "./AboutField";
 

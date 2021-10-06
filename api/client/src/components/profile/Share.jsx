@@ -5,8 +5,6 @@ import {
   Avatar,
   Input,
   Button,
-  Center,
-  Container,
   Flex,
   Text,
 } from "@chakra-ui/react";
@@ -48,13 +46,13 @@ function Share() {
         <HStack paddingBottom="5px">
           <Button w="220px" bg="white">
             <Box w="30px" mr="4px">
-              <AiFillPicture size="sm" color="red" />
+              <AiFillPicture sizes="sm" color="red" />
             </Box>
             <Text>Picture</Text>
           </Button>
           <Button w="220px" bg="white">
             <Box w="30px" mr="4px">
-              <RiSendPlaneFill size="sm" color="green" />
+              <RiSendPlaneFill sizes="sm" color="green" />
             </Box>
             <Text>Share</Text>
           </Button>

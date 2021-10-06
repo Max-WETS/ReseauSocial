@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Flex, Avatar, Text, Box } from "@chakra-ui/react";
 import { axiosInstance } from "../../config";
 

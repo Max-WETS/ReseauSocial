@@ -1,16 +1,11 @@
 import {
   Container,
-  Center,
-  Flex,
   Tabs,
   TabList,
   TabPanels,
   Tab,
   TabPanel,
-  Spacer,
   Box,
-  Text,
-  Button,
 } from "@chakra-ui/react";
 import React from "react";
 import About from "./About";

@@ -1,15 +1,10 @@
 import React, { useContext, useRef } from "react";
 import {
   CircularProgress,
-  CircularProgressLabel,
-  Box,
   Flex,
   VStack,
   Text,
   FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   Input,
   Button,
 } from "@chakra-ui/react";
@@ -17,8 +12,6 @@ import { Form, Formik } from "formik";
 import { Link } from "react-router-dom";
 import { loginCall } from "../apiCalls";
 import { AuthContext } from "../context/AuthContext";
-import axios from "axios";
-import {axiosInstance} from "../config"
 
 function Login() {
   const email = useRef();
@@ -52,88 +45,85 @@ function Login() {
         </VStack>
         <VStack flex={1} justifyContent="center">
           <Formik>
-            <Form
-              h="300px"
-              p="20px"
-              bg="white"
-              borderRadius="10px"
-              display="flex"
+            <Flex
               flexDirection="column"
               justifyContent="space-between"
-              onSubmit={handleClick}
+              borderRadius="10px"
             >
-              <FormControl>
-                <Input
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  id="email"
-                  required
-                  ref={email}
-                  h="50px"
-                  borderRadius="10px"
-                  border="1px solid lightgray"
-                  fontSize="18px"
-                  pl="20px"
-                  _focus={{ outline: "none" }}
-                />
-              </FormControl>
-              <FormControl>
-                <Input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  id="password"
-                  required
-                  ref={password}
-                  h="50px"
-                  minLength="6"
-                  borderRadius="10px"
-                  border="1px solid lightgray"
-                  fontSize="18px"
-                  pl="20px"
-                  _focus={{ outline: "none" }}
-                />
+              <Form h="300px" p="20px" bg="white" onSubmit={handleClick}>
+                <FormControl>
+                  <Input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    id="email"
+                    required
+                    ref={email}
+                    h="50px"
+                    borderRadius="10px"
+                    border="1px solid lightgray"
+                    fontSize="18px"
+                    pl="20px"
+                    _focus={{ outline: "none" }}
+                  />
+                </FormControl>
+                <FormControl>
+                  <Input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    id="password"
+                    required
+                    ref={password}
+                    h="50px"
+                    minLength="6"
+                    borderRadius="10px"
+                    border="1px solid lightgray"
+                    fontSize="18px"
+                    pl="20px"
+                    _focus={{ outline: "none" }}
+                  />
+                  <Button
+                    type="submit"
+                    h="50px"
+                    borderRadius="10px"
+                    border="none"
+                    bg="blue.400"
+                    color="white"
+                    fontSize="20px"
+                    fontWeight="500"
+                    cursor="pointer"
+                    _focus={{ outline: "none" }}
+                    disabled={isFetching}
+                  >
+                    {isFetching ? (
+                      <CircularProgress color="white" size="20px" />
+                    ) : (
+                      "Sign In"
+                    )}
+                  </Button>
+                </FormControl>
                 <Button
-                  type="submit"
+                  w="60%"
+                  alignSelf="center"
                   h="50px"
                   borderRadius="10px"
                   border="none"
-                  bg="blue.400"
+                  bg="green.400"
                   color="white"
                   fontSize="20px"
                   fontWeight="500"
                   cursor="pointer"
                   _focus={{ outline: "none" }}
-                  disabled={isFetching}
                 >
                   {isFetching ? (
                     <CircularProgress color="white" size="20px" />
                   ) : (
-                    "Sign In"
+                    <Link to="/register">Create a New Account</Link>
                   )}
                 </Button>
-              </FormControl>
-              <Button
-                w="60%"
-                alignSelf="center"
-                h="50px"
-                borderRadius="10px"
-                border="none"
-                bg="green.400"
-                color="white"
-                fontSize="20px"
-                fontWeight="500"
-                cursor="pointer"
-                _focus={{ outline: "none" }}
-              >
-                {isFetching ? (
-                  <CircularProgress color="white" size="20px" />
-                ) : (
-                  <Link to="/register">Create a New Account</Link>
-                )}
-              </Button>
-            </Form>
+              </Form>
+            </Flex>
           </Formik>
         </VStack>
       </Flex>

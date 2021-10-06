@@ -1,5 +1,5 @@
 import { Flex, Avatar, Text, HStack } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 function Message({ message, own, user, friend }) {
   const PF = "http://localhost:3000/";

@@ -1,5 +1,4 @@
 import {
-  Box,
   Flex,
   VStack,
   HStack,
@@ -10,7 +9,6 @@ import {
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { HiUserRemove } from "react-icons/hi";
-import axios from "axios";
 import { axiosInstance } from "../../config";
 import { AuthContext } from "../../context/AuthContext";
 

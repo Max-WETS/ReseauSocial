@@ -4,34 +4,23 @@ import {
   Text,
   Container,
   Circle,
-  Avatar,
   VStack,
   HStack,
   Box,
   useMediaQuery,
   SimpleGrid,
   Button,
-  FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   Input,
   Popover,
   PopoverTrigger,
   PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  PopoverArrow,
-  PopoverCloseButton,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { AiFillCamera, AiOutlineCheck } from "react-icons/ai";
 import { IoPersonAddSharp } from "react-icons/io5";
-import { BsThreeDots } from "react-icons/bs";
 import { AuthContext } from "../../context/AuthContext";
-import axios from "axios";
 import { axiosInstance } from "../../config";
 //const requestUtils = require("../../request.utils");
 
@@ -117,11 +106,12 @@ function ProfilePics({ userData, profileUserStatus }) {
           <Center>
             <VStack>
               <Circle>
-                <Avatar
+                <Image
                   position="relative"
                   zIndex={0}
                   w="150px"
                   h="150px"
+                  borderRadius="50%"
                   name={userData.username}
                   src={
                     PF + userData.profilePicture || PF + "person/noAvatar.png"
@@ -142,7 +132,7 @@ function ProfilePics({ userData, profileUserStatus }) {
                     top="-50px"
                     left="55px"
                   >
-                    <AiFillCamera size="xs" />
+                    <AiFillCamera sizes="sm" />
                   </Circle>
                 </PopoverTrigger>
                 <PopoverContent zIndex={8}>
@@ -199,7 +189,7 @@ function ProfilePics({ userData, profileUserStatus }) {
                   bottom="110px"
                   cursor="pointer"
                 >
-                  <AiFillCamera />
+                  <AiFillCamera sizes="xs" />
                   <Text fontSize="14px" fontWeight="600">
                     Changer la photo de couverture
                   </Text>
@@ -215,7 +205,7 @@ function ProfilePics({ userData, profileUserStatus }) {
                   bottom="110px"
                   cursor="pointer"
                 >
-                  <AiFillCamera size="md" />
+                  <AiFillCamera sizes="md" />
                 </Box>
               )}
             </VStack>

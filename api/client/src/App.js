@@ -53,12 +53,11 @@ function App() {
     });
 
     socket.on("users", (users) => {
-      const newUsers = [];
-      users.map((user) => {
+      const newUsers = users.map((user) => {
         const nUser = user;
         nUser.self = nUser.userID === socket.id;
         nUser.hasNewMessages = false;
-        newUsers.push(nUser);
+        return nUser;
       });
       setConnectedUsers(newUsers);
       dispatch({ type: "CONNECTED_USERS", payload: newUsers });
@@ -80,7 +79,7 @@ function App() {
       setConnectedUsers(users);
       dispatch({ type: "CONNECTED_USERS", payload: users });
     });
-  }, []);
+  }, [dispatch, user]);
 
   useEffect(() => {
     console.log("mise à jour de connectedUsers: ");

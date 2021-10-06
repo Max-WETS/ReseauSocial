@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import {
   VStack,
   HStack,
@@ -10,17 +10,14 @@ import {
   InputLeftElement,
   Input,
   Avatar,
-  Flex,
   Popover,
   PopoverTrigger,
   PopoverContent,
   PopoverHeader,
   PopoverBody,
-  PopoverFooter,
   PopoverArrow,
   PopoverCloseButton,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
 import { SearchIcon } from "@chakra-ui/icons";
 import { RiChatNewLine } from "react-icons/ri";
 import ChatFriend from "./ChatFriend";
@@ -97,13 +94,24 @@ function ChatLeftBar({
         pb="16px"
         borderBottom="solid 1px lightgray"
       >
-        <HStack w="100%" pr="14px" pl="14px" pb="4px" alignItems="center">
+        <HStack
+          w="100%"
+          pr="14px"
+          pl="14px"
+          pb="4px"
+          alignItems="center"
+          spacing={0}
+        >
           <Text fontWeight="700" fontSize="20px">
             Discussions
           </Text>
           <Spacer />
-          <Popover placement="right-end" isLazy>
-            <PopoverTrigger>
+          <Popover
+            modifiers={[{ name: "eventListeners", options: { scroll: false } }]}
+            placement="right-end"
+            isLazy
+          >
+            <PopoverTrigger m={0}>
               <Circle
                 bg="gray.100"
                 size="35px"
@@ -118,7 +126,7 @@ function ChatLeftBar({
                 <RiChatNewLine size="22px" />
               </Circle>
             </PopoverTrigger>
-            <PopoverContent zIndex={8}>
+            <PopoverContent zIndex={8} m={0}>
               <PopoverHeader fontWeight="semibold">
                 <InputGroup>
                   <InputLeftElement

@@ -5,32 +5,20 @@ import {
   Center,
   Text,
   HStack,
-  Box,
   Avatar,
-  Button,
   Circle,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuIcon,
-  MenuCommand,
-  MenuDivider,
   IconButton,
-  InputGroup,
-  InputLeftElement,
-  Input,
 } from "@chakra-ui/react";
-import { ChatIcon, ChevronDownIcon, SearchIcon } from "@chakra-ui/icons";
+import { ChatIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import SearchBar from "./SearchBar";
-import axios from "axios";
 import { axiosInstance } from "../config";
 
 function Header({ userData }) {
@@ -69,7 +57,13 @@ function Header({ userData }) {
         <SearchBar />
       </HStack>
       <Spacer />
-      <HStack spacing="10px" mr="20px">
+      <Flex
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="space-between"
+        w="10.5rem"
+        mr="20px"
+      >
         <Link to={`/profile/${user.userId}`}>
           <Flex
             _hover={{ bg: "gray.200" }}
@@ -102,25 +96,31 @@ function Header({ userData }) {
             <ChatIcon />
           </Circle>
         </Link>
-        <Menu>
-          <>
-            <MenuButton
-              w="35px"
-              h="35px"
-              bg="white"
-              borderRadius="45%"
-              as={IconButton}
-              icon={<ChevronDownIcon />}
-            ></MenuButton>
-            <MenuList>
-              <MenuItem icon={<FaUser />}>Profile</MenuItem>
-              <MenuItem icon={<FiLogOut />} onClick={handleClick}>
-                Logout
-              </MenuItem>
-            </MenuList>
-          </>
+        <Menu
+          modifiers={[
+            { name: "eventListeners", options: { scroll: false } },
+            {
+              name: "offset",
+              options: { offset: [0, 0] },
+            },
+          ]}
+        >
+          <MenuButton
+            w="35px"
+            h="35px"
+            bg="white"
+            borderRadius="45%"
+            as={IconButton}
+            icon={<ChevronDownIcon />}
+          ></MenuButton>
+          <MenuList m={0}>
+            <MenuItem icon={<FaUser />}>Profile</MenuItem>
+            <MenuItem icon={<FiLogOut />} onClick={handleClick}>
+              Logout
+            </MenuItem>
+          </MenuList>
         </Menu>
-      </HStack>
+      </Flex>
     </Flex>
   );
 }
