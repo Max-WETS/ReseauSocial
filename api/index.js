@@ -4,6 +4,7 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const httpServer = createServer(app);
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
 const cors = require("cors");
@@ -18,7 +19,7 @@ const router = express.Router();
 const path = require("path");
 const color = require("colors");
 const socket = require("socket.io");
-
+const { checkUser, requireAuth } = require("./middleware/auth.middleware");
 dotenv.config();
 
 mongoose.connect(
@@ -34,10 +35,19 @@ mongoose.connect(
   }
 );
 // app.use("/images", express.static(path.join(__dirname, "public/images")));
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 //middleware
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser());
+app.get("*", checkUser);
+app.get("/jwtid", requireAuth, (req, res) => {
+  res.status(200).send(res.locals.user._id);
+});
 // app.use(helmet());
 app.use(morgan("common"));
 

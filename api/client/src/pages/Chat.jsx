@@ -16,7 +16,11 @@ function Chat() {
   }, [currentChat]);
 
   useEffect(() => {
-    console.log("chat window / connected users: " + user.connectedUsers.length);
+    console.log(
+      "chat window / connected users: " + user.connectedUsers
+        ? user.connectedUsers.length
+        : "0"
+    );
     for (let u of user.connectedUsers) {
       console.log(u);
     }
