@@ -16,14 +16,17 @@ function Chat() {
   }, [currentChat]);
 
   useEffect(() => {
-    console.log(
-      "chat window / connected users: " + user.connectedUsers
-        ? user.connectedUsers.length
-        : "0"
-    );
-    for (let u of user.connectedUsers) {
-      console.log(u);
+    if (user.connectedUsers) {
+      console.log(
+        "chat window / connected users: " + user.connectedUsers
+          ? user.connectedUsers?.length
+          : "0"
+      );
+      for (let u of user.connectedUsers) {
+        console.log(u);
+      }
     }
+
     const getConversations = async () => {
       try {
         const res = await axiosInstance.get("/conversations/" + user.userId);

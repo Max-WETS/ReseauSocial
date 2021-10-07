@@ -107,8 +107,14 @@ function ChatLeftBar({
           </Text>
           <Spacer />
           <Popover
-            modifiers={[{ name: "eventListeners", options: { scroll: false } }]}
-            placement="right-end"
+            modifiers={[
+              { name: "eventListeners", options: { scroll: false } },
+              // {
+              //   name: "offset",
+              //   options: { offset: [183, -40] },
+              // },
+            ]}
+            // placement="right-end"
             isLazy
           >
             <PopoverTrigger m={0}>

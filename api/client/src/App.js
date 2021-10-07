@@ -20,27 +20,25 @@ function App() {
 
   useEffect(() => {
     const sessionID = localStorage.getItem("sessionID");
-    console.log("client-side sessionID: " + sessionID);
+    // console.log("client-side sessionID: " + sessionID);
 
     if (sessionID) {
       socket.auth = { sessionID };
       socket.connect();
-    } else {
-      if (user) {
-        socket.auth = { username: user["username"], userID: user.userId };
-        socket.connect();
-      }
+    } else if (user) {
+      socket.auth = { username: user["username"], userID: user.userId };
+      socket.connect();
     }
 
     socket.on("session", ({ sessionID, userID, username }) => {
-      console.log(
-        "sessionID reçu client-side: " +
-          sessionID +
-          ", session username: " +
-          username +
-          ", session userID: " +
-          userID
-      );
+      // console.log(
+      //   "sessionID reçu client-side: " +
+      //     sessionID +
+      //     ", session username: " +
+      //     username +
+      //     ", session userID: " +
+      //     userID
+      // );
       socket.auth = { sessionID };
       localStorage.setItem("sessionID", sessionID);
       socket.userID = userID;
@@ -62,10 +60,10 @@ function App() {
       setConnectedUsers(newUsers);
       dispatch({ type: "CONNECTED_USERS", payload: newUsers });
 
-      console.log("Chargement / utilisateurs connectés: " + newUsers.length);
-      for (let u of newUsers) {
-        console.log(u);
-      }
+      // console.log("Chargement / utilisateurs connectés: " + newUsers.length);
+      // for (let u of newUsers) {
+      //   console.log(u);
+      // }
     });
 
     socket.on("user connected", (user) => {

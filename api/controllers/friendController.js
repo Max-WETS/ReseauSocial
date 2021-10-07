@@ -257,3 +257,48 @@ module.exports.acceptFriend = async (req, res) => {
     res.status(403).json("you can't accept yourself as a friend");
   }
 };
+
+module.exports.getRecommendations = async (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+  if (req.body.senderId !== req.params.id) {
+    try {
+      // request the sender's friend list
+      let senderFriendList = await FriendList.findOne({
+        userId: req.body.senderId,
+      });
+      senderFriendList = senderFriendList.friendsList.filter(
+        (f) => f.status === "confirmé"
+      );
+      !senderFriendList &&
+        res.status(400).json("you have no confirmed friends");
+      // res.status(200).json(senderFriendList);
+
+      // request the receiver's friend list
+      let receiverFriendList = await FriendList.findOne({
+        userId: req.params.id,
+      });
+      receiverFriendList = receiverFriendList.friendsList.map((friend) => {
+        return friend.friendId;
+      });
+      console.log(receiverFriendList);
+
+      // remove receiver's friends from sender's list
+      const recommendableFriends = senderFriendList.filter(
+        (friend) =>
+          receiverFriendList.indexOf(friend.friendId < 0) &&
+          friend.friendId !== req.params.id
+      );
+      console.log("recommendable friends: " + recommendableFriends);
+      !recommendableFriends &&
+        res.status(400).json("this user is already your friends' friend");
+
+      res.status(200).json(recommendableFriends);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  } else {
+    res.status(403).json("you can't recommend friends to yourself");
+  }
+};

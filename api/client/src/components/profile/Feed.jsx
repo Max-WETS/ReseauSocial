@@ -45,7 +45,7 @@ function Feed({ userData }) {
   return (
     <>
       {(userData._id === user.userId ||
-        confirmedFriends.includes(userData._id)) && <Share />}
+        confirmedFriends.includes(userData._id)) && <Share user={user} />}
       {posts.map((p) => (
         <Post post={p} key={p._id} />
       ))}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Flex, HStack, VStack, Text, Avatar, Box } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 import { axiosInstance } from "../../config";
 
 function Post({ post }) {
@@ -33,12 +34,17 @@ function Post({ post }) {
       >
         <VStack paddingBottom="20px" alignItems="flex-start" minW="100%">
           <HStack position="relative" minW="100%">
-            <Avatar
-              size="md"
-              name={user.username}
-              src={PF + user.profilePicture}
-              cursor="pointer"
-            />
+            <Link
+              to={`/profile/${user._id}`}
+              style={{ textDecoration: "none" }}
+            >
+              <Avatar
+                size="md"
+                name={user.username}
+                src={PF + user.profilePicture}
+                cursor="pointer"
+              />
+            </Link>
             <VStack alignItems="flex-start">
               <Text h="14px" fontWeight="500">
                 {user.username}

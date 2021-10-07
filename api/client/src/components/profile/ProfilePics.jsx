@@ -24,7 +24,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { axiosInstance } from "../../config";
 //const requestUtils = require("../../request.utils");
 
-function ProfilePics({ userData, profileUserStatus }) {
+function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
   const [isLargerThan900] = useMediaQuery("(min-width: 900px)");
   const { user, dispatch } = useContext(AuthContext);
   const PF = "http://localhost:3000/";
@@ -123,6 +123,7 @@ function ProfilePics({ userData, profileUserStatus }) {
               <Popover placement="right-end" isLazy>
                 <PopoverTrigger>
                   <Circle
+                    visibility={isUserProfile ? "visible" : "hidden"}
                     cursor="pointer"
                     maxW="30px"
                     bg="gray.100"
@@ -179,6 +180,7 @@ function ProfilePics({ userData, profileUserStatus }) {
               </Popover>
               {isLargerThan900 ? (
                 <HStack
+                  visibility={isUserProfile ? "visible" : "hidden"}
                   borderRadius="md"
                   pl="6px"
                   pr="6px"

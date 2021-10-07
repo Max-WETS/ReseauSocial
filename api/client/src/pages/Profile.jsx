@@ -95,7 +95,11 @@ function Profile() {
   return (
     <>
       <Header userData={userData} />
-      <ProfilePics userData={userData} profileUserStatus={profileUserStatus} />
+      <ProfilePics
+        userData={userData}
+        profileUserStatus={profileUserStatus}
+        isUserProfile={isUserProfile}
+      />
       <ProfileMenu
         userData={userData}
         friends={friends}

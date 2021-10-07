@@ -81,21 +81,21 @@ const sessionStore = new InMemorySessionStore();
 
 io.use((socket, next) => {
   const sessionID = socket.handshake.auth.sessionID;
-  console.log("sessionID déjà sauvegardée: " + sessionID);
+  // console.log("sessionID déjà sauvegardée: " + sessionID);
 
   const MapSessions = sessionStore.findAllSessions();
-  console.log("nbre de sessions enregistrées: " + MapSessions.size);
-  for (const [key, value] of MapSessions.entries()) {
-    console.log(
-      `${key} = username: ${value.username}, userID: ${value.userID}`
-    );
-  }
+  // console.log("nbre de sessions enregistrées: " + MapSessions.size);
+  // for (const [key, value] of MapSessions.entries()) {
+  //   console.log(
+  //     `${key} = username: ${value.username}, userID: ${value.userID}`
+  //   );
+  // }
 
   if (sessionID) {
     const session = sessionStore.findSession(sessionID);
-    console.log("session stockée: " + session);
+    // console.log("session stockée: " + session);
     if (session) {
-      console.log("session username: " + session.username);
+      // console.log("session username: " + session.username);
       socket.sessionID = sessionID;
       socket.userID = session.userID;
       socket.username = session.username;
@@ -108,7 +108,7 @@ io.use((socket, next) => {
     return next(new Error("invalid username"));
   }
   const userID = socket.handshake.auth.userID;
-  console.log("socket.auth.userID: " + userID);
+  // console.log("socket.auth.userID: " + userID);
   if (!username) {
     return next(new Error("invalid userID"));
   }
@@ -125,12 +125,12 @@ io.on("connection", (socket) => {
     username: socket.username,
     connected: true,
   });
-  console.log(
-    "sessionID à sauvegarder: " +
-      socket.sessionID +
-      ", session's username: " +
-      socket.username
-  );
+  // console.log(
+  //   "sessionID à sauvegarder: " +
+  //     socket.sessionID +
+  //     ", session's username: " +
+  //     socket.username
+  // );
 
   socket.emit("session", {
     sessionID: socket.sessionID,
@@ -169,10 +169,10 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", async () => {
     const matchingSockets = await io.in(socket.userID).allSockets();
-    console.log("nbre matching sockets: " + matchingSockets.size);
-    for (const entry of matchingSockets.entries()) {
-      console.log(entry);
-    }
+    // console.log("nbre matching sockets: " + matchingSockets.size);
+    // for (const entry of matchingSockets.entries()) {
+    //   console.log(entry);
+    // }
     const isDisconnected = matchingSockets.size === 0;
     if (isDisconnected) {
       // notify other users
@@ -189,16 +189,16 @@ io.on("connection", (socket) => {
         connected: false,
       });
       const session = sessionStore.findSession(socket.sessionID);
-      console.log(
-        "session déconnectée: " +
-          socket.sessionID +
-          ", session's username: " +
-          session.username +
-          ", session's userID: " +
-          session.userID +
-          ", statut de connexion: " +
-          session.connected
-      );
+      // console.log(
+      //   "session déconnectée: " +
+      //     socket.sessionID +
+      //     ", session's username: " +
+      //     session.username +
+      //     ", session's userID: " +
+      //     session.userID +
+      //     ", statut de connexion: " +
+      //     session.connected
+      // );
     }
   });
 });

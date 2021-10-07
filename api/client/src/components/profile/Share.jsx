@@ -12,7 +12,9 @@ import React from "react";
 import { AiFillPicture } from "react-icons/ai";
 import { RiSendPlaneFill } from "react-icons/ri";
 
-function Share() {
+function Share({ user }) {
+  const PF = "http://localhost:3000/";
+
   return (
     <Flex
       w="500px"
@@ -30,8 +32,8 @@ function Share() {
         >
           <Avatar
             size="md"
-            name="Maxime Wets"
-            src="person/Max.jpg"
+            name={user?.username || "unknown user"}
+            src={PF + user?.profilePicture || PF + "person/noAvatar.jpg"}
             cursor="pointer"
           />
           <Input
