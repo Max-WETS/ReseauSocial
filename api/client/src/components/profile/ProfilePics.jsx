@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Center,
   Image,
   Text,
@@ -15,9 +16,13 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverArrow,
+  PopoverCloseButton,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { AiFillCamera, AiOutlineCheck } from "react-icons/ai";
 import { IoPersonAddSharp } from "react-icons/io5";
 import { AuthContext } from "../../context/AuthContext";
@@ -29,6 +34,8 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
   const { user, dispatch } = useContext(AuthContext);
   const PF = "http://localhost:3000/";
   const [file, setFile] = useState();
+  const [recommendations, setRecommendations] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handlePicture = async (e) => {
     e.preventDefault();
@@ -79,6 +86,46 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
       console.log(err);
     }
   };
+
+  const handleClickRecommend = async (recommendation) => {
+    setIsOpen(false);
+    try {
+      await axiosInstance.post(`/friends/${recommendation._id}/recommend`, {
+        userId: user.userId,
+        recommendedFriendId: userData._id,
+      });
+      const recommendations = await axiosInstance.post(
+        `/friends/${userData._id}/recommendations`,
+        { senderId: user.userId }
+      );
+      console.log("recommendations post add: " + recommendations.data.length);
+      for (let u of recommendations.data) {
+        console.log(u);
+      }
+      setRecommendations(recommendations.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      try {
+        const recommendations = await axiosInstance.post(
+          `/friends/${userData._id}/recommendations`,
+          { senderId: user.userId }
+        );
+        console.log("recommendations ante add: " + recommendations.data.length);
+        for (let u of recommendations.data) {
+          console.log(u);
+        }
+        setRecommendations(recommendations.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchRecommendations();
+  }, [user.userId, userData._id]);
 
   return (
     <>
@@ -225,21 +272,86 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
                   switch (profileUserStatus) {
                     case "friend":
                       return (
-                        <Button
-                          bg="blue.300"
-                          w="65px"
-                          h="25px"
-                          position="relative"
-                          top="-45px"
-                          alignItems="center"
-                          justifyContent="center"
-                          textAlign="center"
+                        <Popover
+                          // isOpen={isOpen}
+                          closeOnBlur={true}
+                          closeOnEsc={true}
+                          modifiers={[
+                            {
+                              name: "eventListeners",
+                              options: { scroll: false },
+                            },
+                            // {
+                            //   name: "offset",
+                            //   options: { offset: [183, -40] },
+                            // },
+                          ]}
+                          // placement="right-end"
+                          isLazy
                         >
-                          <HStack spacing={0}>
-                            <Text>Friend</Text>
-                            <AiOutlineCheck />
-                          </HStack>
-                        </Button>
+                          <PopoverTrigger m={0}>
+                            <Button
+                              bg="blue.300"
+                              w="65px"
+                              h="25px"
+                              position="relative"
+                              top="-45px"
+                              alignItems="center"
+                              justifyContent="center"
+                              textAlign="center"
+                              onClick={() => setIsOpen(true)}
+                            >
+                              <HStack spacing={0}>
+                                <Text>Friend</Text>
+                                <AiOutlineCheck />
+                              </HStack>
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent>
+                            <PopoverArrow />
+                            <PopoverCloseButton />
+                            <PopoverHeader>
+                              Recommend this friend to:
+                            </PopoverHeader>
+                            <PopoverBody>
+                              {recommendations.length > 0 ? (
+                                recommendations.map((recommendation, i) => (
+                                  <HStack
+                                    bg="white"
+                                    p="4px"
+                                    _hover={{ backgroundColor: "blue.200" }}
+                                    key={i}
+                                    cursor="pointer"
+                                    onClick={() =>
+                                      handleClickRecommend(recommendation)
+                                    }
+                                  >
+                                    <Avatar
+                                      size="md"
+                                      name={recommendation.username}
+                                      src={PF + recommendation.profilePicture}
+                                      cursor="pointer"
+                                    />
+                                    <Text
+                                      h="14px"
+                                      fontWeight="500"
+                                      position="relative"
+                                      top="-5px"
+                                      style={{ textDecoration: "none" }}
+                                    >
+                                      {recommendation.username}
+                                    </Text>
+                                  </HStack>
+                                ))
+                              ) : (
+                                <Text>
+                                  This user is already in touch with all your
+                                  friends
+                                </Text>
+                              )}
+                            </PopoverBody>
+                          </PopoverContent>
+                        </Popover>
                       );
                     case "pending":
                       return (

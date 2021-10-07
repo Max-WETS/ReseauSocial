@@ -1,4 +1,5 @@
 const FriendList = require("../models/FriendList");
+const User = require("../models/User");
 const ObjectID = require("mongoose").Types.ObjectId;
 
 // get friends
@@ -173,16 +174,38 @@ module.exports.recommendFriend = async (req, res) => {
         friendList = await newFriendList.save();
       }
 
+      let recommendedFriendFriendsList = await FriendList.findOne({
+        userId: req.body.recommendedFriendId,
+      });
+      if (!recommendedFriendFriendsList) {
+        const newRecommendedFriendFriendsList = new FriendList({
+          userId: req.params.id,
+        });
+        recommendedFriendFriendsList =
+          await newRecommendedFriendFriendsList.save();
+      }
+
       if (
         !friendList.friendsList.some(
           (friend) => friend.friendId === req.body.recommendedFriendId
+        ) &&
+        !recommendedFriendFriendsList.friendsList.some(
+          (friend) => friend.friendId === req.params.id
         )
       ) {
         await friendList.updateOne({
           $push: {
             friendsList: {
-              friendId: req.body.userId,
+              friendId: req.body.recommendedFriendId,
               status: "recommandé",
+            },
+          },
+        });
+        await recommendedFriendFriendsList.updateOne({
+          $push: {
+            friendsList: {
+              friendId: req.params.id,
+              status: "a reçu une recommandation",
             },
           },
         });
@@ -268,33 +291,45 @@ module.exports.getRecommendations = async (req, res) => {
       let senderFriendList = await FriendList.findOne({
         userId: req.body.senderId,
       });
-      senderFriendList = senderFriendList.friendsList.filter(
-        (f) => f.status === "confirmé"
-      );
+      senderFriendList = senderFriendList.friendsList
+        .filter((f) => f.status === "confirmé")
+        .map((friend) => {
+          return friend.friendId.toString();
+        });
+      console.log("sender's friends: " + senderFriendList);
+
       !senderFriendList &&
         res.status(400).json("you have no confirmed friends");
-      // res.status(200).json(senderFriendList);
 
       // request the receiver's friend list
       let receiverFriendList = await FriendList.findOne({
         userId: req.params.id,
       });
       receiverFriendList = receiverFriendList.friendsList.map((friend) => {
-        return friend.friendId;
+        return friend.friendId.toString();
       });
-      console.log(receiverFriendList);
+      console.log("receiver's friends: " + receiverFriendList);
 
       // remove receiver's friends from sender's list
-      const recommendableFriends = senderFriendList.filter(
-        (friend) =>
-          receiverFriendList.indexOf(friend.friendId < 0) &&
-          friend.friendId !== req.params.id
+      let recommendableFriends = senderFriendList.filter(
+        (friendId) =>
+          receiverFriendList.indexOf(friendId) < 0 && friendId !== req.params.id
       );
-      console.log("recommendable friends: " + recommendableFriends);
       !recommendableFriends &&
         res.status(400).json("this user is already your friends' friend");
 
-      res.status(200).json(recommendableFriends);
+      // get users
+      const users = await User.find().select("-password");
+
+      const recommendedUsers = [];
+      recommendableFriends = recommendableFriends.map((friend) => {
+        for (let user of users) {
+          if (user._id.toString() === friend) {
+            recommendedUsers.push(user);
+          }
+        }
+      });
+      res.status(200).json(recommendedUsers);
     } catch (err) {
       res.status(500).json(err);
     }
