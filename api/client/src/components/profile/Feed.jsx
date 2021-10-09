@@ -14,7 +14,9 @@ function Feed({ userData }) {
       try {
         const res = await axiosInstance.get(`/posts/timeline/${userData._id}`);
         const postsList = res.data.sort((a, b) => {
-          return new Date(b.createAt) - new Date(a.createdAt);
+          const dateA = new Date(a.createdAt).getTime();
+          const dateB = new Date(b.createdAt).getTime();
+          return dateA > dateB ? -1 : 1;
         });
         setPosts(postsList);
       } catch (err) {
@@ -45,9 +47,16 @@ function Feed({ userData }) {
   return (
     <>
       {(userData._id === user.userId ||
-        confirmedFriends.includes(userData._id)) && <Share user={user} />}
+        confirmedFriends.includes(userData._id)) && (
+        <Share
+          user={user}
+          userData={userData}
+          setPosts={setPosts}
+          posts={posts}
+        />
+      )}
       {posts.map((p) => (
-        <Post post={p} key={p._id} />
+        <Post post={p} key={p._id} setPosts={setPosts} />
       ))}
     </>
   );

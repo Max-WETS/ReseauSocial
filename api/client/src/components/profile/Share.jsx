@@ -8,12 +8,27 @@ import {
   Flex,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import { AiFillPicture } from "react-icons/ai";
 import { RiSendPlaneFill } from "react-icons/ri";
+import { axiosInstance } from "../../config";
 
-function Share({ user }) {
+function Share({ user, userData, setPosts, posts }) {
   const PF = "http://localhost:3000/";
+  const [newPost, setNewPost] = useState("");
+
+  const handleClickNewPost = async () => {
+    try {
+      const res = await axiosInstance.post(`/posts/profile/${userData._id}`, {
+        userId: user.userId,
+        desc: newPost,
+      });
+      setPosts((prev) => [res.data, ...prev]);
+      setNewPost("");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <Flex
@@ -43,6 +58,8 @@ function Share({ user }) {
             bg="gray.100"
             type="mood"
             placeholder="What's on your mind?"
+            value={newPost}
+            onChange={(e) => setNewPost(e.target.value)}
           />
         </HStack>
         <HStack paddingBottom="5px">
@@ -52,7 +69,7 @@ function Share({ user }) {
             </Box>
             <Text>Picture</Text>
           </Button>
-          <Button w="220px" bg="white">
+          <Button w="220px" bg="white" onClick={handleClickNewPost}>
             <Box w="30px" mr="4px">
               <RiSendPlaneFill sizes="sm" color="green" />
             </Box>

@@ -249,7 +249,7 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
                   borderRadius="md"
                   border="2px solid lightgray"
                   bg="gray.100"
-                  h="28px"
+                  h="20px"
                   position="relative"
                   right="-250px"
                   bottom="110px"
