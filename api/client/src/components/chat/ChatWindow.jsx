@@ -47,9 +47,12 @@ function ChatWindow({ currentChat, user }) {
       };
       fetchFriendData();
 
-      if (!user.connectedUsers) return;
-      const connected = user.connectedUsers.find((u) => u.userID === friendId);
-      connected ? setIsConnected(true) : setIsConnected(false);
+      if (user.connectedUsers?.length < 1) {
+        const connected = user.connectedUsers.find(
+          (u) => u.userID === friendId
+        );
+        connected ? setIsConnected(true) : setIsConnected(false);
+      }
     }
   }, [currentChat, user.userId, currentChat?.messages, user.connectedUsers]);
 
