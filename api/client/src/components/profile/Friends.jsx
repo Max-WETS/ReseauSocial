@@ -50,9 +50,9 @@ function Friends({ friends, userData, isUserProfile }) {
       </Grid>
       <Tabs variant="soft-rounded" colorScheme="blue.100">
         <TabList borderBottom="solid 1px lightgray">
-          <Tab>Confirmés</Tab>
-          <Tab>En attente</Tab>
-          <Tab>Recommandés</Tab>
+          <Tab>{`Confirmed (${confirmedFriends.length})`}</Tab>
+          <Tab>{`Pending (${waitingFriends.length})`}</Tab>
+          <Tab>{`Recommended (${recommendedFriends.length})`}</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>

@@ -102,7 +102,9 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
       for (let u of recommendations.data) {
         console.log(u);
       }
-      setRecommendations(recommendations.data);
+      setRecommendations((prev) =>
+        [...prev].filter((r) => r._id !== recommendation._id)
+      );
     } catch (err) {
       console.log(err);
     }
@@ -345,10 +347,17 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
                                   </HStack>
                                 ))
                               ) : (
-                                <Text>
-                                  This user is already in touch with all your
-                                  friends
-                                </Text>
+                                <Box
+                                  color="gray.300"
+                                  alignItems="center"
+                                  justifyContent="center"
+                                  textAlign="center"
+                                >
+                                  <Text>
+                                    This user is already in touch with all your
+                                    friends
+                                  </Text>
+                                </Box>
                               )}
                             </PopoverBody>
                           </PopoverContent>

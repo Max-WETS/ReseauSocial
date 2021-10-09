@@ -19,10 +19,22 @@ function Friend({ friend, isUserProfile }) {
 
   const handleClickAddRecommended = async () => {
     try {
+      await axiosInstance.put(`/friends/${friend.friendId}/remove`, {
+        userId: user.userId,
+      });
       await axiosInstance.post(`/friends/${friend.friendId}/add`, {
         userId: user.userId,
       });
-      dispatch({ type: "ADD_RECOMMENDED_FRIEND", payload: friend.friendId });
+      const res = await axiosInstance.get(`/friends/${user.userId}`);
+      const friendsList = res.data;
+      const newFriendArray = friendsList.filter(
+        (f) => f.friendId === friend.friendId
+      );
+      const newFriend = newFriendArray[0];
+      newFriend["username"] = friend.username;
+      newFriend["profilePicture"] = friend.profilePicture;
+
+      dispatch({ type: "ADD_FRIEND", payload: newFriend });
     } catch (err) {
       console.log(err);
     }
@@ -128,6 +140,10 @@ function Friend({ friend, isUserProfile }) {
                     h="25px"
                     p={3}
                     borderRadius="50%"
+                    _active={{
+                      transform: "translateY(1px)",
+                    }}
+                    onClick={handleClickAddRecommended}
                   >
                     <Text>Invite</Text>
                   </Button>
@@ -140,6 +156,10 @@ function Friend({ friend, isUserProfile }) {
                     h="25px"
                     p={3}
                     borderRadius="50%"
+                    _active={{
+                      transform: "translateY(1px)",
+                    }}
+                    onClick={handleClickRemove}
                   >
                     <Text>Ignore</Text>
                   </Button>
