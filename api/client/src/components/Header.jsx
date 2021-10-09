@@ -41,6 +41,7 @@ function Header({ userData }) {
       position="sticky"
       top={0}
       zIndex={999}
+      pr="30px"
     >
       <HStack spacing="10px">
         <Link to="/">
@@ -62,7 +63,6 @@ function Header({ userData }) {
         alignItems="center"
         justifyContent="space-between"
         w="10.5rem"
-        mr="20px"
       >
         <Link to={`/profile/${user.userId}`}>
           <Flex
@@ -71,6 +71,7 @@ function Header({ userData }) {
             maxW="100px"
             h="35px"
             bg="white"
+            mr="4px"
             borderRadius="50px"
             cursor="pointer"
           >
@@ -90,6 +91,7 @@ function Header({ userData }) {
             bg="white"
             h="35px"
             w="40px"
+            mr="4px"
             cursor="pointer"
             _hover={{ bg: "gray.200" }}
           >

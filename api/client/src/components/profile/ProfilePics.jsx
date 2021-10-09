@@ -110,6 +110,7 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
 
   useEffect(() => {
     const fetchRecommendations = async () => {
+      if (isUserProfile) return;
       try {
         const recommendations = await axiosInstance.post(
           `/friends/${userData._id}/recommendations`,

@@ -82,15 +82,21 @@ function About({ userData }) {
   };
 
   return (
-    <Container w="600px" paddingTop="10px" paddingBottom="10px" pr={0} pl={0}>
-      <Box>
-        <Text paddingBottom="5px" borderBottom="1px solid lightgray">
+    <Container
+      maxW="600px"
+      paddingTop="10px"
+      paddingBottom="10px"
+      pr={0}
+      pl={0}
+    >
+      <Box paddingBottom="5px">
+        <Text ml="8px" fontWeight="600" fontSize="16px">
           About
         </Text>
       </Box>
-      <Box>
-        <VStack paddingTop="10px">
-          <HStack alignItems="center">
+      <Box borderTop="1px solid lightgray">
+        <VStack paddingTop="10px" ml="6px" mr="6px">
+          <HStack alignItems="center" w="100%">
             <AboutField
               user={userData}
               updateForm={updateFormBio}
