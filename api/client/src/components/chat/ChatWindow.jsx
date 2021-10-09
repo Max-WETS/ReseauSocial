@@ -22,8 +22,12 @@ function ChatWindow({ currentChat, user }) {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    if (!friend) return;
-    console.log("chat window / connected users: " + user.connectedUsers.length);
+    if (!user.connectedUsers) return;
+    console.log(
+      "chat window / connected users: " + user.connectedUsers
+        ? user.connectedUsers.length
+        : "0"
+    );
     for (let u of user.connectedUsers) {
       console.log(u);
     }

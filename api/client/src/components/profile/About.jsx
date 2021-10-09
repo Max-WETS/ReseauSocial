@@ -3,7 +3,7 @@ import { Container, Text, Box, VStack, HStack } from "@chakra-ui/react";
 import { axiosInstance } from "../../config";
 import AboutField from "./AboutField";
 
-function About({ userData }) {
+function About({ userData, isUserProfile }) {
   const [bufferBio, setBufferBio] = useState("");
   const [bufferAge, setBufferAge] = useState("");
   const [bufferCity, setBufferCity] = useState("");
@@ -105,6 +105,7 @@ function About({ userData }) {
               value={bio}
               setBuffer={setBufferBio}
               handleUpdate={handleUpdate}
+              isUserProfile={isUserProfile}
             />
           </HStack>
           <HStack alignItems="center" w="100%">
@@ -116,6 +117,7 @@ function About({ userData }) {
               value={age}
               setBuffer={setBufferAge}
               handleUpdate={handleUpdate}
+              isUserProfile={isUserProfile}
             />
           </HStack>
           <HStack alignItems="center" w="100%">
@@ -127,6 +129,7 @@ function About({ userData }) {
               value={city}
               setBuffer={setBufferCity}
               handleUpdate={handleUpdate}
+              isUserProfile={isUserProfile}
             />
           </HStack>
           <HStack alignItems="center" w="100%">
@@ -138,6 +141,7 @@ function About({ userData }) {
               value={email}
               setBuffer={setBufferEmail}
               handleUpdate={handleUpdate}
+              isUserProfile={isUserProfile}
             />
           </HStack>
         </VStack>

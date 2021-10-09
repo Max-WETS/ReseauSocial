@@ -25,14 +25,15 @@ function Friend({ friend, isUserProfile }) {
       await axiosInstance.post(`/friends/${friend.friendId}/add`, {
         userId: user.userId,
       });
-      const res = await axiosInstance.get(`/friends/${user.userId}`);
-      const friendsList = res.data;
+      const resFriends = await axiosInstance.get(`/friends/${user.userId}`);
+      const resUser = await axiosInstance.get(`/users/${friend.friendId}`);
+      const friendsList = resFriends.data;
       const newFriendArray = friendsList.filter(
         (f) => f.friendId === friend.friendId
       );
       const newFriend = newFriendArray[0];
-      newFriend["username"] = friend.username;
-      newFriend["profilePicture"] = friend.profilePicture;
+      newFriend["username"] = resUser.data.username;
+      newFriend["profilePicture"] = resUser.data.profilePicture;
 
       dispatch({ type: "ADD_FRIEND", payload: newFriend });
     } catch (err) {

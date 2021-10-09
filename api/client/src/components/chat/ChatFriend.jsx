@@ -21,9 +21,10 @@ function ChatFriend({ conversation, user, currentChat }) {
     };
     fetchFriendData();
 
-    if (!user.connectedUsers) return;
-    const connected = user.connectedUsers.find((u) => u.userID === friendId);
-    connected ? setIsConnected(true) : setIsConnected(false);
+    if (user.connectedUsers?.length > 0) {
+      const connected = user.connectedUsers.find((u) => u.userID === friendId);
+      connected ? setIsConnected(true) : setIsConnected(false);
+    }
   }, [conversation, user.userId, user.connectedUsers]);
 
   useEffect(() => {

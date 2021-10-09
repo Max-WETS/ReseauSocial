@@ -29,7 +29,7 @@ function ProfileMenu({ userData, friends, isUserProfile }) {
           <Container maxW="50%" bg="white" minW="500px" padding={0}>
             <TabPanels>
               <TabPanel p={0}>
-                <About userData={userData} />
+                <About userData={userData} isUserProfile={isUserProfile} />
               </TabPanel>
               <TabPanel p={0}>
                 <Feed userData={userData} />

@@ -12,6 +12,7 @@ function AboutField({
   value,
   setBuffer,
   handleUpdate,
+  isUserProfile,
 }) {
   return (
     <>
@@ -42,11 +43,13 @@ function AboutField({
             })()}
             : {" " + value ? value : null}
           </Text>
-          <AiFillEdit
-            cursor="pointer"
-            color="blue"
-            onClick={() => setUpdateForm(true)}
-          />
+          {isUserProfile ? (
+            <AiFillEdit
+              cursor="pointer"
+              color="blue"
+              onClick={() => setUpdateForm(true)}
+            />
+          ) : null}
         </HStack>
       )}
       {updateForm && (
