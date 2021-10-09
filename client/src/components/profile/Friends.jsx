@@ -1,10 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import {
   Container,
-  Box,
-  HStack,
-  Avatar,
-  Flex,
   Grid,
   Text,
   Input,
@@ -19,12 +15,8 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import Friend from "./Friend";
-import { AuthContext } from "../../context/AuthContext";
-import axios from "axios";
 
 function Friends({ friends, userData, isUserProfile }) {
-  const { user } = useContext(AuthContext);
-
   const confirmedFriends =
     friends.filter((friend) => friend.status === "confirmé") || null;
   const waitingFriends =

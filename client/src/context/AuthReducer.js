@@ -64,6 +64,22 @@ const AuthReducer = (state, action) => {
           }),
         },
       };
+    case "UPDATE_PROFILE_PIC":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          profilePicture: action.payload,
+        },
+      };
+    case "CONNECTED_USERS":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          connectedUsers: action.payload,
+        },
+      };
     default:
       return state;
   }

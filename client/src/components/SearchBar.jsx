@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { SearchIcon } from "@chakra-ui/icons";
-import axios from "axios";
 import { axiosInstance } from "../config";
 import { AuthContext } from "../context/AuthContext";
 
@@ -45,13 +44,6 @@ function SearchBar() {
     //console.log("matches", matches);
     setSuggestions(matches);
     setText(text);
-  };
-
-  const refreshPage = () => {
-    setTimeout(() => {
-      window.location.reload(false);
-    }, 5);
-    console.log("page to reload");
   };
 
   return (

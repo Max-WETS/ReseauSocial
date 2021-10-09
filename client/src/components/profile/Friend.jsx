@@ -1,5 +1,4 @@
 import {
-  Box,
   Flex,
   VStack,
   HStack,
@@ -9,15 +8,14 @@ import {
   Button,
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import { HiUserRemove } from "react-icons/hi";
-import axios from "axios";
 import { axiosInstance } from "../../config";
 import { AuthContext } from "../../context/AuthContext";
 
 function Friend({ friend, isUserProfile }) {
   const PF = "http://localhost:3000/";
   const { user, dispatch } = useContext(AuthContext);
-  console.log(PF);
 
   const handleClickAddRecommended = async () => {
     try {
@@ -62,12 +60,17 @@ function Friend({ friend, isUserProfile }) {
       pl="10px"
     >
       <HStack>
-        <Avatar
-          size="md"
-          name={friend.username || "unknown user"}
-          src={PF + friend.profilePicture || PF + "person/noAvatar.jpg"}
-          cursor="pointer"
-        />
+        <Link
+          to={`/profile/${friend.friendId}`}
+          style={{ textDecoration: "none" }}
+        >
+          <Avatar
+            size="md"
+            name={friend.username || "unknown user"}
+            src={PF + friend.profilePicture || PF + "person/noAvatar.jpg"}
+            cursor="pointer"
+          />
+        </Link>
         <Text h="14px" fontWeight="500" position="relative" top="-5px">
           {friend.username || "unknown user"}
         </Text>
@@ -88,6 +91,9 @@ function Friend({ friend, isUserProfile }) {
                     h="25px"
                     p={3}
                     borderRadius="50%"
+                    _active={{
+                      transform: "translateY(1px)",
+                    }}
                     onClick={handleClickAccept}
                   >
                     <Text>Accept</Text>
@@ -101,6 +107,9 @@ function Friend({ friend, isUserProfile }) {
                     h="25px"
                     p={3}
                     borderRadius="50%"
+                    _active={{
+                      transform: "translateY(1px)",
+                    }}
                     onClick={handleClickRemove}
                   >
                     <Text>Ignore</Text>
@@ -146,6 +155,12 @@ function Friend({ friend, isUserProfile }) {
                   borderRadius="50%"
                   alignItems="center"
                   justifyContent="center"
+                  _hover={{
+                    backgroundColor: "lightgray",
+                  }}
+                  _active={{
+                    transform: "translateY(1px)",
+                  }}
                   onClick={handleClickRemove}
                 >
                   <HiUserRemove />

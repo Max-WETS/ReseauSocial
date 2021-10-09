@@ -1,18 +1,11 @@
 import React, { useRef } from "react";
 import { useHistory } from "react-router";
-import axios from "axios";
 import { axiosInstance } from "../config";
 import {
-  CircularProgress,
-  CircularProgressLabel,
-  Box,
   Flex,
   VStack,
   Text,
   FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   Input,
   Button,
 } from "@chakra-ui/react";

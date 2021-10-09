@@ -4,7 +4,6 @@ import ProfileMenu from "../components/profile/ProfileMenu";
 import React, { useContext, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import axios from "axios";
 import { axiosInstance } from "../config";
 import { arraysEqual } from "../request.utils";
 
@@ -96,7 +95,11 @@ function Profile() {
   return (
     <>
       <Header userData={userData} />
-      <ProfilePics userData={userData} profileUserStatus={profileUserStatus} />
+      <ProfilePics
+        userData={userData}
+        profileUserStatus={profileUserStatus}
+        isUserProfile={isUserProfile}
+      />
       <ProfileMenu
         userData={userData}
         friends={friends}
