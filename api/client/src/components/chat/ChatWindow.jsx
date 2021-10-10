@@ -22,11 +22,10 @@ function ChatWindow({ currentChat, user }) {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    if (!user.connectedUsers) return;
+    if (user.connectedUsers?.length < 1) return;
     console.log(
-      "chat window / connected users: " + user.connectedUsers
-        ? user.connectedUsers.length
-        : "0"
+      "chat window / connected users: ",
+      user.connectedUsers ? user.connectedUsers.length : "0"
     );
     for (let u of user.connectedUsers) {
       console.log(u);
@@ -47,7 +46,7 @@ function ChatWindow({ currentChat, user }) {
       };
       fetchFriendData();
 
-      if (user.connectedUsers?.length < 1) {
+      if (user.connectedUsers?.length > 0) {
         const connected = user.connectedUsers.find(
           (u) => u.userID === friendId
         );
@@ -142,15 +141,17 @@ function ChatWindow({ currentChat, user }) {
       <Flex w="100%" minH="72vh">
         <Flex flexDirection="column" justifyContent="space-between" w="100%">
           <Box h="100%" overflowY="scroll" pr="10px">
-            {messages.map((m) => (
-              <Message
-                key={m._id}
-                message={m}
-                own={m.senderId === user.userId}
-                user={user}
-                friend={friend}
-              />
-            ))}
+            {currentChat
+              ? messages.map((m) => (
+                  <Message
+                    key={m._id}
+                    message={m}
+                    own={m.senderId === user.userId}
+                    user={user}
+                    friend={friend}
+                  />
+                ))
+              : null}
           </Box>
         </Flex>
       </Flex>

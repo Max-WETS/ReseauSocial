@@ -125,12 +125,12 @@ io.on("connection", (socket) => {
     username: socket.username,
     connected: true,
   });
-  // console.log(
-  //   "sessionID à sauvegarder: " +
-  //     socket.sessionID +
-  //     ", session's username: " +
-  //     socket.username
-  // );
+  console.log(
+    "sessionID à sauvegarder: " +
+      socket.sessionID +
+      ", session's username: " +
+      socket.username
+  );
 
   socket.emit("session", {
     sessionID: socket.sessionID,
@@ -157,7 +157,7 @@ io.on("connection", (socket) => {
   socket.broadcast.emit("user connected", {
     userID: socket.userID,
     username: socket.username,
-    users: users,
+    // users: users,
   });
 
   socket.on("private message", ({ message, to }) => {
@@ -180,7 +180,7 @@ io.on("connection", (socket) => {
       socket.broadcast.emit("user disconnected", {
         userID: socket.userID,
         username: socket.username,
-        users: users,
+        // users: users,
       });
       // update the connection status of the session
       sessionStore.saveSession(socket.sessionID, {
@@ -189,16 +189,16 @@ io.on("connection", (socket) => {
         connected: false,
       });
       const session = sessionStore.findSession(socket.sessionID);
-      // console.log(
-      //   "session déconnectée: " +
-      //     socket.sessionID +
-      //     ", session's username: " +
-      //     session.username +
-      //     ", session's userID: " +
-      //     session.userID +
-      //     ", statut de connexion: " +
-      //     session.connected
-      // );
+      console.log(
+        "session déconnectée: " +
+          socket.sessionID +
+          ", session's username: " +
+          session.username +
+          ", session's userID: " +
+          session.userID +
+          ", statut de connexion: " +
+          session.connected
+      );
     }
   });
 });

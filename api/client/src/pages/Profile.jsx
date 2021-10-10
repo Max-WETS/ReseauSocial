@@ -7,7 +7,7 @@ import { AuthContext } from "../context/AuthContext";
 import { axiosInstance } from "../config";
 import { arraysEqual } from "../request.utils";
 
-function Profile() {
+function Profile({ connectedUsers }) {
   const { user, dispatch } = useContext(AuthContext);
   const [userData, setUserData] = useState({});
   const [friends, setFriends] = useState(user.userFriends);
@@ -94,7 +94,7 @@ function Profile() {
 
   return (
     <>
-      <Header userData={userData} />
+      <Header userData={userData} connectedUsers={connectedUsers} />
       <ProfilePics
         userData={userData}
         profileUserStatus={profileUserStatus}
