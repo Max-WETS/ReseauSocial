@@ -34,7 +34,7 @@ function Profile({ connectedUsers }) {
         const userFriend = userFriendList[0];
         if (userFriend !== undefined) {
           const status = userFriend.status;
-          console.log(status);
+          // console.log(status);
           if (status === "confirmé") {
             setProfileUserStatus("friend");
           } else if (status === "invitation en cours") {
@@ -94,7 +94,7 @@ function Profile({ connectedUsers }) {
 
   return (
     <>
-      <Header userData={userData} connectedUsers={connectedUsers} />
+      <Header userData={userData} />
       <ProfilePics
         userData={userData}
         profileUserStatus={profileUserStatus}
@@ -103,6 +103,7 @@ function Profile({ connectedUsers }) {
       <ProfileMenu
         userData={userData}
         friends={friends}
+        setFriends={setFriends}
         isUserProfile={isUserProfile}
       />
     </>

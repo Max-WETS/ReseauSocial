@@ -10,6 +10,7 @@ import Chat from "./pages/Chat";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import Admin from "./pages/Admin";
 import { useContext, useEffect, useState, useCallback } from "react";
 import { AuthContext } from "./context/AuthContext";
 import { SocketContext } from "./socket";
@@ -120,6 +121,7 @@ function App() {
           connectedUsers={connectedUsers}
         />
         <PrivateRoute exact path="/chat" component={Chat} />
+        <PrivateRoute exact path="/admin" component={Admin} />
         <Route exact path="/register">
           <Register />
         </Route>

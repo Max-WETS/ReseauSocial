@@ -2,6 +2,12 @@ const FriendList = require("../models/FriendList");
 const User = require("../models/User");
 const ObjectID = require("mongoose").Types.ObjectId;
 
+// get friends lists
+module.exports.getFriendsLists = async (req, res) => {
+  const friendsLists = await FriendList.find();
+  res.status(200).json(friendsLists);
+};
+
 // get friends
 module.exports.getFriends = async (req, res) => {
   if (!ObjectID.isValid(req.params.id))
@@ -269,7 +275,18 @@ module.exports.acceptFriend = async (req, res) => {
           }
         );
 
-        res.status(200).json("friend invitation accepted");
+        // console.log("updated status");
+        const acceptedFriend = senderFriendList.friendsList.find(
+          (f) => f.friendId === req.params.id
+        );
+        // console.log("accepted friend", acceptedFriend);
+        const acceptedFriendData = await User.findOne({ _id: req.params.id });
+        // console.log("accepted friend data", acceptedFriendData);
+
+        res.status(200).json({
+          acceptedFriend: acceptedFriend,
+          acceptedFriendData: acceptedFriendData,
+        });
       } else {
         res.status(403).json("you're not friend with this user");
       }
@@ -296,7 +313,7 @@ module.exports.getRecommendations = async (req, res) => {
         .map((friend) => {
           return friend.friendId.toString();
         });
-      console.log("sender's friends: " + senderFriendList);
+      // console.log("sender's friends: " + senderFriendList);
 
       !senderFriendList &&
         res.status(400).json("you have no confirmed friends");
@@ -308,7 +325,7 @@ module.exports.getRecommendations = async (req, res) => {
       receiverFriendList = receiverFriendList.friendsList.map((friend) => {
         return friend.friendId.toString();
       });
-      console.log("receiver's friends: " + receiverFriendList);
+      // console.log("receiver's friends: " + receiverFriendList);
 
       // remove receiver's friends from sender's list
       let recommendableFriends = senderFriendList.filter(

@@ -11,6 +11,7 @@ export const loginCall = async (userCredential, dispatch) => {
       payload: {
         userId: res.data.user,
         username: user.data.username,
+        isAdmin: user.data.isAdmin,
         profilePicture: user.data.profilePicture,
         userFriends: friends.data,
       },

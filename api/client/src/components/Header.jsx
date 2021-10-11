@@ -16,6 +16,8 @@ import {
 import { ChatIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
+import { MdAdminPanelSettings } from "react-icons/md";
+import { RiAdminFill } from "react-icons/ri";
 import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import SearchBar from "./SearchBar";
@@ -28,7 +30,7 @@ function Header() {
   const history = useHistory();
   const PF = "http://localhost:3000/";
 
-  const handleClick = () => {
+  const handleClickLogout = () => {
     const path = "login";
     axiosInstance.get("/auth/logout");
     dispatch({ type: "LOGOUT" });
@@ -124,7 +126,12 @@ function Header() {
           ></MenuButton>
           <MenuList m={0}>
             <MenuItem icon={<FaUser />}>Profile</MenuItem>
-            <MenuItem icon={<FiLogOut />} onClick={handleClick}>
+            {user.isAdmin ? (
+              <Link to="/admin">
+                <MenuItem icon={<RiAdminFill />}>Admin</MenuItem>
+              </Link>
+            ) : null}
+            <MenuItem icon={<FiLogOut />} onClick={handleClickLogout}>
               Logout
             </MenuItem>
           </MenuList>

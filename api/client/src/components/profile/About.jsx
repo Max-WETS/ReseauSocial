@@ -98,7 +98,7 @@ function About({ userData, isUserProfile }) {
         <VStack paddingTop="10px" ml="6px" mr="6px">
           <HStack alignItems="center" w="100%">
             <AboutField
-              user={userData}
+              userData={userData}
               updateForm={updateFormBio}
               setUpdateForm={setUpdateFormBio}
               field="bio"
@@ -110,7 +110,7 @@ function About({ userData, isUserProfile }) {
           </HStack>
           <HStack alignItems="center" w="100%">
             <AboutField
-              user={userData}
+              userData={userData}
               updateForm={updateFormAge}
               setUpdateForm={setUpdateFormAge}
               field="age"
@@ -122,7 +122,7 @@ function About({ userData, isUserProfile }) {
           </HStack>
           <HStack alignItems="center" w="100%">
             <AboutField
-              user={userData}
+              userData={userData}
               updateForm={updateFormCity}
               setUpdateForm={setUpdateFormCity}
               field="city"
@@ -134,7 +134,7 @@ function About({ userData, isUserProfile }) {
           </HStack>
           <HStack alignItems="center" w="100%">
             <AboutField
-              user={userData}
+              userData={userData}
               updateForm={updateFormEmail}
               setUpdateForm={setUpdateFormEmail}
               field="email"

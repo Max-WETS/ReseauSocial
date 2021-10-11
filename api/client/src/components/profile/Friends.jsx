@@ -16,7 +16,7 @@ import {
 import { SearchIcon } from "@chakra-ui/icons";
 import Friend from "./Friend";
 
-function Friends({ friends, userData, isUserProfile }) {
+function Friends({ friends, setFriends, userData, isUserProfile }) {
   const confirmedFriends =
     friends.filter((friend) => friend.status === "confirmé") || null;
   const waitingFriends =
@@ -61,7 +61,9 @@ function Friends({ friends, userData, isUserProfile }) {
                 <Friend
                   key={friend.friendId}
                   friend={friend}
+                  setFriends={setFriends}
                   isUserProfile={isUserProfile}
+                  userData={userData}
                 />
               ))}
             </SimpleGrid>
@@ -72,7 +74,9 @@ function Friends({ friends, userData, isUserProfile }) {
                 <Friend
                   key={friend.friendId}
                   friend={friend}
+                  setFriends={setFriends}
                   isUserProfile={isUserProfile}
+                  userData={userData}
                 />
               ))}
             </SimpleGrid>
@@ -83,7 +87,9 @@ function Friends({ friends, userData, isUserProfile }) {
                 <Friend
                   key={friend.friendId}
                   friend={friend}
+                  setFriends={setFriends}
                   isUserProfile={isUserProfile}
+                  userData={userData}
                 />
               ))}
             </SimpleGrid>

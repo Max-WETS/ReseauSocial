@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Text, HStack, Box, Flex, Button, Input } from "@chakra-ui/react";
 import { MdDescription, MdEmail } from "react-icons/md";
 import { FaBirthdayCake, FaCity } from "react-icons/fa";
 import { AiFillEdit } from "react-icons/ai";
+import { AuthContext } from "../../context/AuthContext";
 
 function AboutField({
-  user,
+  userData,
   updateForm,
   setUpdateForm,
   field,
@@ -14,6 +15,7 @@ function AboutField({
   handleUpdate,
   isUserProfile,
 }) {
+  const { user } = useContext(AuthContext);
   return (
     <>
       {!updateForm && (
@@ -43,7 +45,7 @@ function AboutField({
             })()}
             : {" " + value ? value : null}
           </Text>
-          {isUserProfile ? (
+          {isUserProfile || user.isAdmin ? (
             <AiFillEdit
               cursor="pointer"
               color="blue"

@@ -3,6 +3,8 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const friendController = require("../controllers/friendController");
 
+// get friends lists
+router.get("/", friendController.getFriendsLists);
 // get friends
 router.get("/:id", friendController.getFriends);
 // add a friend
