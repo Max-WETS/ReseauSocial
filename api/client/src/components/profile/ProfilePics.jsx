@@ -164,7 +164,13 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
                   borderRadius="50%"
                   name={userData.username}
                   src={
-                    PF + userData.profilePicture || PF + "person/noAvatar.png"
+                    isUserProfile
+                      ? user.profilePicture
+                        ? PF + user.profilePicture
+                        : PF + "person/noAvatar.jpg"
+                      : userData.profilePicture
+                      ? PF + userData.profilePicture
+                      : PF + "person/noAvatar.png"
                   }
                   cursor="pointer"
                   border="white 2px solid"

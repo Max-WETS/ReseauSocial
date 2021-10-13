@@ -11,6 +11,8 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Admin from "./pages/Admin";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import { useContext, useEffect, useState, useCallback } from "react";
 import { AuthContext } from "./context/AuthContext";
 import { SocketContext } from "./socket";
@@ -127,6 +129,20 @@ function App() {
         </Route>
         <Route exact path="/login">
           {user ? <Redirect to={`/profile/${user.userId}`} /> : <Login />}
+        </Route>
+        <Route exact path="/forgotPassword">
+          {user ? (
+            <Redirect to={`/profile/${user.userId}`} />
+          ) : (
+            <ForgotPassword />
+          )}
+        </Route>
+        <Route exact path="/reset/:token">
+          {user ? (
+            <Redirect to={`/profile/${user.userId}`} />
+          ) : (
+            <ResetPassword />
+          )}
         </Route>
       </Switch>
     </Router>

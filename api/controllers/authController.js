@@ -1,6 +1,8 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer");
+const randomBytes = require("randombytes");
 
 const maxAge = 3 * 24 * 60 * 60 * 1000;
 
@@ -60,4 +62,75 @@ module.exports.login = async (req, res) => {
 module.exports.logout = (req, res) => {
   res.cookie("jwt", "", { maxAge: 1 });
   res.status(200).send("logged out");
+};
+
+// forgot password
+module.exports.forgotPassword = async (req, res) => {
+  if (req.body.email === "") {
+    res.status(400).send("email required");
+  }
+  console.error(req.body.email);
+
+  const token = randomBytes(20).toString("hex");
+  const user = await User.findOneAndUpdate(
+    { email: req.body.email },
+    {
+      $set: {
+        resetPasswordToken: token,
+        resetPasswordExpires: Date.now() + 3600000,
+      },
+    }
+  );
+  !user && res.status(200).send("email not found in MongoDB");
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: `${process.env.EMAIL_ADDRESS}`,
+      pass: `${process.env.EMAIL_PASSWORD}`,
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
+
+  const mailOptions = {
+    from: "maxweb910@gmail.com",
+    to: `${user.email}`,
+    subject: "Link to Reset Password",
+    text:
+      "Please click on the following link, or paste this into your browser to complete the process within one hour of receiving it:\n\n" +
+      `http://localhost:3000/reset/${token}\n\n`,
+  };
+
+  console.log("sending mail");
+
+  transporter.sendMail(mailOptions, (err, response) => {
+    if (err) {
+      console.error("there was an error: ", err);
+    } else {
+      console.log("here is the res: ", response);
+      res.status(200).json("recovery email sent");
+    }
+  });
+};
+
+// reset password
+module.exports.resetPassword = async (req, res) => {
+  const query = User.find();
+  const user = await User.findOne({
+    resetPasswordToken: req.params.token,
+    resetPasswordExpires: { $gt: Date.now() },
+  }).exec();
+  console.log("user: ", user);
+  console.log("test user: ", !user);
+  if (!user) {
+    res.status(200).send({ message: "no user found or link expired" });
+  } else {
+    res.status(200).send({
+      userId: user._id,
+      username: user.username,
+      message: "password reset link ok",
+    });
+  }
 };

@@ -14,13 +14,15 @@ module.exports.getFriends = async (req, res) => {
     return res.status(400).send("ID unknown : " + req.params.id);
 
   try {
-    const friendList = await FriendList.findOne({ userId: req.params.id });
-    !friendList &&
-      res
-        .status(404)
-        .json("This user doesn't exist or she/he has no friends yet");
+    let friendList = await FriendList.findOne({ userId: req.params.id });
+    if (!friendList) {
+      friendList = new FriendList({ userId: req.params.id });
+      // res
+      //   .status(200)
+      //   .json("This user doesn't exist or she/he has no friends yet");
+    }
 
-    const friendsList = friendList.friendsList;
+    friendsList = friendList.friendsList;
     res.status(200).json(friendsList);
   } catch (err) {
     res.status(500).json(err);

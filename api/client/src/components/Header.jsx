@@ -87,8 +87,13 @@ function Header() {
             <Avatar
               ml="1px"
               size="sm"
-              name="Maxime Wets"
-              src={PF + user.profilePicture || PF + "person/noAvatar.jpg"}
+              borderRadius="50%"
+              name={user?.username}
+              src={
+                user.profilePicture
+                  ? PF + user.profilePicture
+                  : PF + "person/noAvatar.jpg"
+              }
             />
             <Text ml="4px" mr="8px">
               {user.username}
