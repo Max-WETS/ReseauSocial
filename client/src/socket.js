@@ -1,7 +1,7 @@
 import { io } from "socket.io-client";
 import React from "react";
 
-const URL = "https://maxweb21.herokuapp.com/";
+const URL = "http://localhost:5000/";
 const socket = io(URL, { autoConnect: false });
 
 socket.onAny((event, ...args) => {

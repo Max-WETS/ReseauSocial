@@ -32,7 +32,7 @@ import { axiosInstance } from "../../config";
 function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
   const [isLargerThan900] = useMediaQuery("(min-width: 900px)");
   const { user, dispatch } = useContext(AuthContext);
-  const PF = "https://maxweb21.herokuapp.com/images/";
+  const PF = "http:localhost:3000/";
   const [file, setFile] = useState();
   const [recommendations, setRecommendations] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
