@@ -47,7 +47,8 @@ function Feed({ userData }) {
   return (
     <>
       {(userData._id === user.userId ||
-        confirmedFriends.includes(userData._id)) && (
+        confirmedFriends.includes(userData._id) ||
+        user.isAdmin) && (
         <Share
           user={user}
           userData={userData}

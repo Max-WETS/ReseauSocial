@@ -8,26 +8,31 @@ import {
   Input,
   Button,
 } from "@chakra-ui/react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { axiosInstance } from "../../config";
 import Message from "./Message";
 import socket from "../../socket";
+import { AuthContext } from "../../context/AuthContext";
 
 function ChatWindow({ currentChat, user }) {
   const PF = "http://localhost:3000/";
+  const { connectedUsers } = useContext(AuthContext);
   const [friend, setFriend] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    if (!friend) return;
-    console.log("chat window / connected users: " + user.connectedUsers.length);
-    for (let u of user.connectedUsers) {
+    if (connectedUsers?.length < 1) return;
+    console.log(
+      "chat window / connected users: ",
+      connectedUsers ? connectedUsers.length : "0"
+    );
+    for (let u of connectedUsers) {
       console.log(u);
     }
-  }, [friend, user.connectedUsers, isConnected]);
+  }, [friend, connectedUsers, isConnected]);
 
   useEffect(() => {
     if (currentChat) {
@@ -43,11 +48,12 @@ function ChatWindow({ currentChat, user }) {
       };
       fetchFriendData();
 
-      if (!user.connectedUsers) return;
-      const connected = user.connectedUsers.find((u) => u.userID === friendId);
-      connected ? setIsConnected(true) : setIsConnected(false);
+      if (connectedUsers?.length > 0) {
+        const connected = connectedUsers.find((u) => u.userID === friendId);
+        connected ? setIsConnected(true) : setIsConnected(false);
+      }
     }
-  }, [currentChat, user.userId, currentChat?.messages, user.connectedUsers]);
+  }, [currentChat, user.userId, currentChat?.messages, connectedUsers]);
 
   useEffect(() => {
     if (currentChat) {
@@ -135,15 +141,17 @@ function ChatWindow({ currentChat, user }) {
       <Flex w="100%" minH="72vh">
         <Flex flexDirection="column" justifyContent="space-between" w="100%">
           <Box h="100%" overflowY="scroll" pr="10px">
-            {messages.map((m) => (
-              <Message
-                key={m._id}
-                message={m}
-                own={m.senderId === user.userId}
-                user={user}
-                friend={friend}
-              />
-            ))}
+            {currentChat
+              ? messages.map((m) => (
+                  <Message
+                    key={m._id}
+                    message={m}
+                    own={m.senderId === user.userId}
+                    user={user}
+                    friend={friend}
+                  />
+                ))
+              : null}
           </Box>
         </Flex>
       </Flex>

@@ -3,7 +3,7 @@ import { Container, Text, Box, VStack, HStack } from "@chakra-ui/react";
 import { axiosInstance } from "../../config";
 import AboutField from "./AboutField";
 
-function About({ userData }) {
+function About({ userData, isUserProfile }) {
   const [bufferBio, setBufferBio] = useState("");
   const [bufferAge, setBufferAge] = useState("");
   const [bufferCity, setBufferCity] = useState("");
@@ -98,46 +98,50 @@ function About({ userData }) {
         <VStack paddingTop="10px" ml="6px" mr="6px">
           <HStack alignItems="center" w="100%">
             <AboutField
-              user={userData}
+              userData={userData}
               updateForm={updateFormBio}
               setUpdateForm={setUpdateFormBio}
               field="bio"
               value={bio}
               setBuffer={setBufferBio}
               handleUpdate={handleUpdate}
+              isUserProfile={isUserProfile}
             />
           </HStack>
           <HStack alignItems="center" w="100%">
             <AboutField
-              user={userData}
+              userData={userData}
               updateForm={updateFormAge}
               setUpdateForm={setUpdateFormAge}
               field="age"
               value={age}
               setBuffer={setBufferAge}
               handleUpdate={handleUpdate}
+              isUserProfile={isUserProfile}
             />
           </HStack>
           <HStack alignItems="center" w="100%">
             <AboutField
-              user={userData}
+              userData={userData}
               updateForm={updateFormCity}
               setUpdateForm={setUpdateFormCity}
               field="city"
               value={city}
               setBuffer={setBufferCity}
               handleUpdate={handleUpdate}
+              isUserProfile={isUserProfile}
             />
           </HStack>
           <HStack alignItems="center" w="100%">
             <AboutField
-              user={userData}
+              userData={userData}
               updateForm={updateFormEmail}
               setUpdateForm={setUpdateFormEmail}
               field="email"
               value={email}
               setBuffer={setBufferEmail}
               handleUpdate={handleUpdate}
+              isUserProfile={isUserProfile}
             />
           </HStack>
         </VStack>

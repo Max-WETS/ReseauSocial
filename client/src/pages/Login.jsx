@@ -7,6 +7,7 @@ import {
   FormControl,
   Input,
   Button,
+  HStack,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { Link } from "react-router-dom";
@@ -46,6 +47,7 @@ function Login() {
         <VStack flex={1} justifyContent="center">
           <Formik>
             <Flex
+              w="350px"
               flexDirection="column"
               justifyContent="space-between"
               borderRadius="10px"
@@ -83,25 +85,36 @@ function Login() {
                     pl="20px"
                     _focus={{ outline: "none" }}
                   />
-                  <Button
-                    type="submit"
-                    h="50px"
-                    borderRadius="10px"
-                    border="none"
-                    bg="blue.400"
-                    color="white"
-                    fontSize="20px"
-                    fontWeight="500"
-                    cursor="pointer"
-                    _focus={{ outline: "none" }}
-                    disabled={isFetching}
-                  >
-                    {isFetching ? (
-                      <CircularProgress color="white" size="20px" />
-                    ) : (
-                      "Sign In"
-                    )}
-                  </Button>
+                  <HStack justifyContent="space-between">
+                    <Button
+                      type="submit"
+                      h="50px"
+                      borderRadius="10px"
+                      border="none"
+                      bg="blue.400"
+                      color="white"
+                      fontSize="20px"
+                      fontWeight="500"
+                      cursor="pointer"
+                      _focus={{ outline: "none" }}
+                      disabled={isFetching}
+                    >
+                      {isFetching ? (
+                        <CircularProgress color="white" size="20px" />
+                      ) : (
+                        "Sign In"
+                      )}
+                    </Button>
+                    <Link to={"/forgotPassword"}>
+                      <Text
+                        _hover={{ "text-decoration": "underline" }}
+                        position="relative"
+                        top="-5px"
+                      >
+                        Forgot password?
+                      </Text>
+                    </Link>
+                  </HStack>
                 </FormControl>
                 <Button
                   w="60%"

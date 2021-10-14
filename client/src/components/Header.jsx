@@ -16,20 +16,26 @@ import {
 import { ChatIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
+import { MdAdminPanelSettings } from "react-icons/md";
+import { RiAdminFill } from "react-icons/ri";
 import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import SearchBar from "./SearchBar";
 import { axiosInstance } from "../config";
+import { SocketContext } from "../socket";
 
-function Header({ userData }) {
-  const { user, dispatch } = useContext(AuthContext);
+function Header() {
+  const { user, connectedUsers, dispatch } = useContext(AuthContext);
+  const socket = useContext(SocketContext);
   const history = useHistory();
   const PF = "http://localhost:3000/";
 
-  const handleClick = () => {
+  const handleClickLogout = () => {
     const path = "login";
     axiosInstance.get("/auth/logout");
     dispatch({ type: "LOGOUT" });
+    localStorage.removeItem("sessionID");
+    socket.disconnect(true);
     history.push(path);
   };
 
@@ -56,6 +62,9 @@ function Header({ userData }) {
           </Center>
         </Link>
         <SearchBar />
+        <Text color="white" position="absolute" right="220px">
+          Online users: {connectedUsers ? connectedUsers.length : "0"}
+        </Text>
       </HStack>
       <Spacer />
       <Flex
@@ -78,8 +87,13 @@ function Header({ userData }) {
             <Avatar
               ml="1px"
               size="sm"
-              name="Maxime Wets"
-              src={PF + user.profilePicture || PF + "person/noAvatar.jpg"}
+              borderRadius="50%"
+              name={user?.username}
+              src={
+                user.profilePicture
+                  ? PF + user.profilePicture
+                  : PF + "person/noAvatar.jpg"
+              }
             />
             <Text ml="4px" mr="8px">
               {user.username}
@@ -117,7 +131,12 @@ function Header({ userData }) {
           ></MenuButton>
           <MenuList m={0}>
             <MenuItem icon={<FaUser />}>Profile</MenuItem>
-            <MenuItem icon={<FiLogOut />} onClick={handleClick}>
+            {user.isAdmin ? (
+              <Link to="/admin">
+                <MenuItem icon={<RiAdminFill />}>Admin</MenuItem>
+              </Link>
+            ) : null}
+            <MenuItem icon={<FiLogOut />} onClick={handleClickLogout}>
               Logout
             </MenuItem>
           </MenuList>

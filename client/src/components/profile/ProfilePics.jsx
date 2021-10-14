@@ -102,7 +102,9 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
       for (let u of recommendations.data) {
         console.log(u);
       }
-      setRecommendations(recommendations.data);
+      setRecommendations((prev) =>
+        [...prev].filter((r) => r._id !== recommendation._id)
+      );
     } catch (err) {
       console.log(err);
     }
@@ -162,7 +164,13 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
                   borderRadius="50%"
                   name={userData.username}
                   src={
-                    PF + userData.profilePicture || PF + "person/noAvatar.png"
+                    isUserProfile
+                      ? user.profilePicture
+                        ? PF + user.profilePicture
+                        : PF + "person/noAvatar.jpg"
+                      : userData.profilePicture
+                      ? PF + userData.profilePicture
+                      : PF + "person/noAvatar.png"
                   }
                   cursor="pointer"
                   border="white 2px solid"
@@ -345,10 +353,17 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
                                   </HStack>
                                 ))
                               ) : (
-                                <Text>
-                                  This user is already in touch with all your
-                                  friends
-                                </Text>
+                                <Box
+                                  color="gray.300"
+                                  alignItems="center"
+                                  justifyContent="center"
+                                  textAlign="center"
+                                >
+                                  <Text>
+                                    This user is already in touch with all your
+                                    friends
+                                  </Text>
+                                </Box>
                               )}
                             </PopoverBody>
                           </PopoverContent>

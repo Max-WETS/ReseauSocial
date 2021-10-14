@@ -48,7 +48,11 @@ function Share({ user, userData, setPosts, posts }) {
           <Avatar
             size="md"
             name={user?.username || "unknown user"}
-            src={PF + user?.profilePicture || PF + "person/noAvatar.jpg"}
+            src={
+              user.profilePicture
+                ? PF + user.profilePicture
+                : PF + "person/noAvatar.jpg"
+            }
             cursor="pointer"
           />
           <Input

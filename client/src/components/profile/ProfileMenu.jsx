@@ -12,7 +12,7 @@ import About from "./About";
 import Feed from "./Feed";
 import Friends from "./Friends";
 
-function ProfileMenu({ userData, friends, isUserProfile }) {
+function ProfileMenu({ userData, friends, setFriends, isUserProfile }) {
   return (
     <>
       {/* <Container maxW="50%" bg="white" pr={0} pl={0}> */}
@@ -29,7 +29,7 @@ function ProfileMenu({ userData, friends, isUserProfile }) {
           <Container maxW="50%" bg="white" minW="500px" padding={0}>
             <TabPanels>
               <TabPanel p={0}>
-                <About userData={userData} />
+                <About userData={userData} isUserProfile={isUserProfile} />
               </TabPanel>
               <TabPanel p={0}>
                 <Feed userData={userData} />
@@ -38,6 +38,7 @@ function ProfileMenu({ userData, friends, isUserProfile }) {
                 <Friends
                   userData={userData}
                   friends={friends}
+                  setFriends={setFriends}
                   isUserProfile={isUserProfile}
                 />
               </TabPanel>

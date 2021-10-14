@@ -13,16 +13,32 @@ import { HiUserRemove } from "react-icons/hi";
 import { axiosInstance } from "../../config";
 import { AuthContext } from "../../context/AuthContext";
 
-function Friend({ friend, isUserProfile }) {
+function Friend({ friend, setFriends, isUserProfile, userData }) {
   const PF = "http://localhost:3000/";
   const { user, dispatch } = useContext(AuthContext);
+  const ifIsAdmin = !isUserProfile && user.isAdmin === true;
 
   const handleClickAddRecommended = async () => {
     try {
-      await axiosInstance.post(`/friends/${friend.friendId}/add`, {
-        userId: user.userId,
+      await axiosInstance.put(`/friends/${friend.friendId}/remove`, {
+        userId: ifIsAdmin ? userData._id : user.userId,
       });
-      dispatch({ type: "ADD_RECOMMENDED_FRIEND", payload: friend.friendId });
+      await axiosInstance.post(`/friends/${friend.friendId}/add`, {
+        userId: ifIsAdmin ? userData._id : user.userId,
+      });
+      const resFriends = await axiosInstance.get(
+        `/friends/${ifIsAdmin ? userData._id : user.userId}`
+      );
+      const resUser = await axiosInstance.get(`/users/${friend.friendId}`);
+      const friendsList = resFriends.data;
+      const newFriendArray = friendsList.filter(
+        (f) => f.friendId === friend.friendId
+      );
+      const newFriend = newFriendArray[0];
+      newFriend["username"] = resUser.data.username;
+      newFriend["profilePicture"] = resUser.data.profilePicture;
+
+      dispatch({ type: "ADD_FRIEND", payload: newFriend });
     } catch (err) {
       console.log(err);
     }
@@ -31,9 +47,15 @@ function Friend({ friend, isUserProfile }) {
   const handleClickRemove = async () => {
     try {
       await axiosInstance.put(`/friends/${friend.friendId}/remove`, {
-        userId: user.userId,
+        userId: ifIsAdmin ? userData._id : user.userId,
       });
-      dispatch({ type: "REMOVE_FRIEND", payload: friend.friendId });
+      dispatch({
+        type: "REMOVE_FRIEND",
+        payload: ifIsAdmin ? userData._id : friend.friendId,
+      });
+      setFriends((prev) =>
+        [...prev].filter((f) => f.friendId !== friend.friendId)
+      );
     } catch (err) {
       console.log(err);
     }
@@ -41,10 +63,26 @@ function Friend({ friend, isUserProfile }) {
 
   const handleClickAccept = async () => {
     try {
-      await axiosInstance.put(`/friends/${friend.friendId}/accept`, {
-        userId: user.userId,
+      const ID = ifIsAdmin ? userData._id : user.userId;
+      // console.log("ID sender", ID);
+      const res = await axiosInstance.put(
+        `/friends/${friend.friendId}/accept`,
+        {
+          userId: ID,
+        }
+      );
+      const newFriend = {
+        ...res.data.acceptedFriend,
+        status: "confirmé",
+        username: res.data.acceptedFriendData.username,
+        profilePicture: res.data.acceptedFriendData.profilePicture,
+      };
+      // console.log("newAcceptedFriend", newFriend);
+      dispatch({
+        type: "ACCEPT_FRIEND",
+        payload: ifIsAdmin ? userData._id : friend.friendId,
       });
-      dispatch({ type: "ACCEPT_FRIEND", payload: friend.friendId });
+      setFriends((prev) => [...prev, newFriend]);
     } catch (err) {
       console.log(err);
     }
@@ -77,7 +115,7 @@ function Friend({ friend, isUserProfile }) {
       </HStack>
       <Spacer />
       {(() => {
-        if (isUserProfile) {
+        if (isUserProfile || user.isAdmin === true) {
           switch (friend.status) {
             case "en attente de confirmation":
               return (
@@ -128,6 +166,10 @@ function Friend({ friend, isUserProfile }) {
                     h="25px"
                     p={3}
                     borderRadius="50%"
+                    _active={{
+                      transform: "translateY(1px)",
+                    }}
+                    onClick={handleClickAddRecommended}
                   >
                     <Text>Invite</Text>
                   </Button>
@@ -140,6 +182,10 @@ function Friend({ friend, isUserProfile }) {
                     h="25px"
                     p={3}
                     borderRadius="50%"
+                    _active={{
+                      transform: "translateY(1px)",
+                    }}
+                    onClick={handleClickRemove}
                   >
                     <Text>Ignore</Text>
                   </Button>

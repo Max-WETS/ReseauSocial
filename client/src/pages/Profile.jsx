@@ -7,7 +7,7 @@ import { AuthContext } from "../context/AuthContext";
 import { axiosInstance } from "../config";
 import { arraysEqual } from "../request.utils";
 
-function Profile() {
+function Profile({ connectedUsers }) {
   const { user, dispatch } = useContext(AuthContext);
   const [userData, setUserData] = useState({});
   const [friends, setFriends] = useState(user.userFriends);
@@ -34,7 +34,7 @@ function Profile() {
         const userFriend = userFriendList[0];
         if (userFriend !== undefined) {
           const status = userFriend.status;
-          console.log(status);
+          // console.log(status);
           if (status === "confirmé") {
             setProfileUserStatus("friend");
           } else if (status === "invitation en cours") {
@@ -103,6 +103,7 @@ function Profile() {
       <ProfileMenu
         userData={userData}
         friends={friends}
+        setFriends={setFriends}
         isUserProfile={isUserProfile}
       />
     </>

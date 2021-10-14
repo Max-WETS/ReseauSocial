@@ -1,7 +1,10 @@
 const User = require("../models/User");
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
+const multer = require("multer");
+const upload = multer();
 const userController = require("../controllers/userController");
+const uploadController = require("../controllers/uploadController");
 
 // get users
 router.get("/", userController.getUsers);
@@ -11,5 +14,8 @@ router.get("/:id", userController.getUser);
 router.put("/:id", userController.updateUser);
 // delete user
 router.delete("/:id", userController.deleteUser);
+
+// upload
+router.post("/upload", upload.single("file"), uploadController.uploadPicture);
 
 module.exports = router;

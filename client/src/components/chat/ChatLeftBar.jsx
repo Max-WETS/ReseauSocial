@@ -38,13 +38,12 @@ function ChatLeftBar({
 
   const handleClickNewChat = async (e, suggestion) => {
     try {
-      axiosInstance.post("/conversations", {
+      const res = await axiosInstance.post("/conversations", {
         senderId: user.userId,
         receiverId: suggestion.friendId,
       });
-      const res = await axiosInstance.get("/conversations/" + user.userId);
       setText("");
-      setConversations(res.data);
+      setConversations((prev) => [...prev, res.data]);
     } catch (err) {
       console.log(err);
     }
@@ -52,6 +51,7 @@ function ChatLeftBar({
 
   useEffect(() => {
     const fetchUsers = async () => {
+      if (conversations.length < 1) return;
       const existingChatFriendsId = conversations
         .reduce(function (prev, curr) {
           return [...prev, ...curr.members];
@@ -68,7 +68,7 @@ function ChatLeftBar({
 
   const onChangeHandler = (text) => {
     let matches = [];
-    if (text.length > 0) {
+    if (text.length > 0 && user.userFriends) {
       matches = users.filter((u) => {
         const regex = new RegExp(`${text}`, "gi");
         return u.username.match(regex);

@@ -16,7 +16,7 @@ import {
 import { SearchIcon } from "@chakra-ui/icons";
 import Friend from "./Friend";
 
-function Friends({ friends, userData, isUserProfile }) {
+function Friends({ friends, setFriends, userData, isUserProfile }) {
   const confirmedFriends =
     friends.filter((friend) => friend.status === "confirmé") || null;
   const waitingFriends =
@@ -50,9 +50,9 @@ function Friends({ friends, userData, isUserProfile }) {
       </Grid>
       <Tabs variant="soft-rounded" colorScheme="blue.100">
         <TabList borderBottom="solid 1px lightgray">
-          <Tab>Confirmés</Tab>
-          <Tab>En attente</Tab>
-          <Tab>Recommandés</Tab>
+          <Tab>{`Confirmed (${confirmedFriends.length})`}</Tab>
+          <Tab>{`Pending (${waitingFriends.length})`}</Tab>
+          <Tab>{`Recommended (${recommendedFriends.length})`}</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -61,7 +61,9 @@ function Friends({ friends, userData, isUserProfile }) {
                 <Friend
                   key={friend.friendId}
                   friend={friend}
+                  setFriends={setFriends}
                   isUserProfile={isUserProfile}
+                  userData={userData}
                 />
               ))}
             </SimpleGrid>
@@ -72,7 +74,9 @@ function Friends({ friends, userData, isUserProfile }) {
                 <Friend
                   key={friend.friendId}
                   friend={friend}
+                  setFriends={setFriends}
                   isUserProfile={isUserProfile}
+                  userData={userData}
                 />
               ))}
             </SimpleGrid>
@@ -83,7 +87,9 @@ function Friends({ friends, userData, isUserProfile }) {
                 <Friend
                   key={friend.friendId}
                   friend={friend}
+                  setFriends={setFriends}
                   isUserProfile={isUserProfile}
+                  userData={userData}
                 />
               ))}
             </SimpleGrid>

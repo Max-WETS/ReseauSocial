@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Flex, Avatar, Text, Box } from "@chakra-ui/react";
 import { axiosInstance } from "../../config";
+import { AuthContext } from "../../context/AuthContext";
 
 function ChatFriend({ conversation, user, currentChat }) {
   const PF = "http://localhost:3000/";
+  const { connectedUsers } = useContext(AuthContext);
   const [friend, setFriend] = useState(null);
   const [isCurrentChat, setIsCurrentChat] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
@@ -21,10 +23,11 @@ function ChatFriend({ conversation, user, currentChat }) {
     };
     fetchFriendData();
 
-    if (!user.connectedUsers) return;
-    const connected = user.connectedUsers.find((u) => u.userID === friendId);
-    connected ? setIsConnected(true) : setIsConnected(false);
-  }, [conversation, user.userId, user.connectedUsers]);
+    if (connectedUsers?.length > 0) {
+      const connected = connectedUsers.find((u) => u.userID === friendId);
+      connected ? setIsConnected(true) : setIsConnected(false);
+    }
+  }, [conversation, user.userId, connectedUsers]);
 
   useEffect(() => {
     if (currentChat) {

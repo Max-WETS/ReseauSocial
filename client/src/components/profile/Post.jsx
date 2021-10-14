@@ -118,7 +118,7 @@ function Post({ post, setPosts }) {
                 </Text>
               </VStack>
             </Flex>
-            {user.userId === postUser?._id ? (
+            {user.userId === postUser?._id || user.isAdmin ? (
               <Menu>
                 <MenuButton
                   borderRadius="50%"
