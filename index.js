@@ -60,10 +60,10 @@ app.use("/api/friends", friendsRoute);
 app.use("/api/conversations", conversationsRoute);
 
 // only intended for heroku build
-// app.use(express.static(path.join(__dirname, "/client/build")));
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "/client/build", "index.html"));
-// });
+app.use(express.static(path.join(__dirname, "client", "build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
 
 httpServer.listen(process.env.PORT || 5000, () => {
   console.log("Backend server running".green);
