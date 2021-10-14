@@ -36,7 +36,7 @@ mongoose.connection.on("error", (err) => {
   console.error(err);
 });
 
-// app.use("/images", express.static(path.join(__dirname, "public/images")));
+app.use("/images", express.static(path.join(__dirname, "public", "images")));
 const corsOptions = {
   origin: "http://localhost:3000",
   credentials: true,
