@@ -32,7 +32,8 @@ import { axiosInstance } from "../../config";
 function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
   const [isLargerThan900] = useMediaQuery("(min-width: 900px)");
   const { user, dispatch } = useContext(AuthContext);
-  const PF = "http:localhost:3000/";
+  // const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const PF = "";
   const [file, setFile] = useState();
   const [recommendations, setRecommendations] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -141,7 +142,7 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
             h="350px"
             w="900px"
             objectFit="cover"
-            src={PF + "cover/nocover.svg"}
+            src={`../cover/nocover.svg`}
             alt="cover picture"
             borderBottomRadius="5px"
           />
@@ -166,11 +167,11 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
                   src={
                     isUserProfile
                       ? user.profilePicture
-                        ? PF + user.profilePicture
-                        : PF + "person/noAvatar.jpg"
+                        ? `../${user.profilePicture}`
+                        : `../person/noAvatar.jpg`
                       : userData.profilePicture
-                      ? PF + userData.profilePicture
-                      : PF + "person/noAvatar.png"
+                      ? `../${userData.profilePicture}`
+                      : `../person/noAvatar.jpg`
                   }
                   cursor="pointer"
                   border="white 2px solid"
@@ -338,7 +339,7 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
                                     <Avatar
                                       size="md"
                                       name={recommendation.username}
-                                      src={PF + recommendation.profilePicture}
+                                      src={`../${recommendation.profilePicture}`}
                                       cursor="pointer"
                                     />
                                     <Text

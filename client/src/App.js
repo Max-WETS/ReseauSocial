@@ -22,45 +22,75 @@ function App() {
   const [connectedUsers, setConnectedUsers] = useState([]);
   const socket = useContext(SocketContext);
 
-  const handleNewSession = useCallback(({ sessionID, userID, username }) => {
-    console.log(
-      "sessionID reçu client-side: " +
-        sessionID +
-        ", session username: " +
-        username +
-        ", session userID: " +
-        userID
-    );
-    socket.auth = { sessionID };
-    localStorage.setItem("sessionID", sessionID);
-    socket.userID = userID;
-  }, []);
+  const handleNewSession = useCallback(
+    ({ sessionID, userID, username }) => {
+      console.log(
+        "sessionID reçu client-side: " +
+          sessionID +
+          ", session username: " +
+          username +
+          ", session userID: " +
+          userID
+      );
+      socket.auth = { sessionID };
+      localStorage.setItem("sessionID", sessionID);
+      socket.userID = userID;
+    },
+    [socket]
+  );
 
-  const handleConnectedUsers = useCallback((users) => {
-    const newUsers = users.map((user) => {
-      const nUser = user;
-      nUser.self = nUser.userID === socket.id;
-      nUser.hasNewMessages = false;
-      return nUser;
-    });
-    dispatch({ type: "CONNECTED_USERS", payload: newUsers });
-    setConnectedUsers(newUsers);
-  }, []);
+  const handleConnectedUsers = useCallback(
+    (users) => {
+      dispatch({ type: "CONNECTED_USERS", payload: users });
+      setConnectedUsers(users);
+    },
+    [dispatch]
+  );
 
-  const handleNewConnectedUser = useCallback((user) => {
-    user.hasNewMessages = false;
-    user.self = false;
-    setConnectedUsers((prev) => [...prev, user]);
-    dispatch({ type: "USER_CONNECTED", payload: user });
-  }, []);
+  const handleNewConnectedUser = useCallback(
+    (user) => {
+      console.log(
+        "new user / sessionID: ",
+        user.sessionID,
+        ", userID: " + user.userID
+      );
+      console.log(
+        "connected users: ",
+        connectedUsers,
+        "nouvel utilisateur: ",
+        !connectedUsers.find(
+          (u) => u.sessionID === user.sessionID && u.userID && user.sessionID
+        ),
+        "utilisateur existant: ",
+        connectedUsers.find(
+          (u) => u.sessionID === user.sessionID && u.userID && user.sessionID
+        ),
+        "utilisateur connecté: ",
+        user
+      );
+      if (
+        !connectedUsers.find(
+          (u) => u.userID === user.userID && u.sessionID === user.sessionID
+        )
+      ) {
+        setConnectedUsers((prev) => [...prev, user]);
+        dispatch({ type: "USER_CONNECTED", payload: user });
+      }
+    },
+    [connectedUsers, dispatch]
+  );
 
-  const handleDisconnectedUser = useCallback((user) => {
-    const discoUserID = user.userID;
-    setConnectedUsers((prev) =>
-      [...prev].filter((u) => u.userID !== discoUserID)
-    );
-    dispatch({ type: "USER_DISCONNECTED", payload: discoUserID });
-  }, []);
+  const handleDisconnectedUser = useCallback(
+    (user) => {
+      console.log("ok");
+      console.log("disconnection / user.sessionID: ", user.sessionID);
+      dispatch({ type: "USER_DISCONNECTED", payload: user.sessionID });
+      setConnectedUsers((prev) =>
+        [...prev].filter((u) => u.sessionID !== user.sessionID)
+      );
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     if (!user) return;

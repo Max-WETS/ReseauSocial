@@ -4,9 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 
 function PrivateRoute({ component: Component, ...rest }) {
   const { user } = useContext(AuthContext);
-  console.log("component rendered", `${Component.name}`);
   const isAdminComponent = Component.name === "Admin";
-  console.log("is admin component ?", isAdminComponent);
 
   return (
     <Route

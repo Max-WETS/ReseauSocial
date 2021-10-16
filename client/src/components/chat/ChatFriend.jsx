@@ -54,7 +54,7 @@ function ChatFriend({ conversation, user, currentChat }) {
           ml="1px"
           size="md"
           name={friend?.username || "unknown user"}
-          src={PF + friend?.profilePicture || PF + "person/noAvatar.jpg"}
+          src={`../${friend?.profilePicture}` || "../person/noAvatar.jpg"}
         />
         <Box
           display={isConnected ? "flex" : "none"}

@@ -105,7 +105,7 @@ function Friend({ friend, setFriends, isUserProfile, userData }) {
           <Avatar
             size="md"
             name={friend.username || "unknown user"}
-            src={PF + friend.profilePicture || PF + "person/noAvatar.jpg"}
+            src={`../${friend.profilePicture}` || "../person/noAvatar.jpg"}
             cursor="pointer"
           />
         </Link>

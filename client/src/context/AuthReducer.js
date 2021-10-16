@@ -85,7 +85,7 @@ const AuthReducer = (state, action) => {
       return {
         ...state,
         connectedUsers: [...state.connectedUsers].filter(
-          (u) => u.userID !== action.payload
+          (u) => u.sessionID !== action.payload
         ),
       };
     case "USER_CONNECTED":

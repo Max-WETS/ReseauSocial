@@ -91,8 +91,8 @@ function Header() {
               name={user?.username}
               src={
                 user.profilePicture
-                  ? PF + user.profilePicture
-                  : PF + "person/noAvatar.jpg"
+                  ? `../${user.profilePicture}`
+                  : "../person/noAvatar.jpg"
               }
             />
             <Text ml="4px" mr="8px">

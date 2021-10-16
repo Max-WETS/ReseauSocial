@@ -38,6 +38,17 @@ mongoose.connection.on("error", (err) => {
 
 app.use("/images", express.static(path.join(__dirname, "public", "images")));
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, req.body.name);
+  },
+});
+
+const upload = multer({ storage: storage });
+
 const corsOptions = {
   origin: "http://localhost:3000",
   credentials: true,
@@ -61,10 +72,10 @@ app.use("/api/friends", friendsRoute);
 app.use("/api/conversations", conversationsRoute);
 
 // only intended for heroku build
-app.use(express.static(path.join(__dirname, "client", "build")));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-});
+// app.use(express.static(path.join(__dirname, "client", "build")));
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+// });
 
 httpServer.listen(process.env.PORT || 5000, () => {
   console.log("Backend server running".green);
@@ -141,23 +152,46 @@ io.on("connection", (socket) => {
     username: socket.username,
   });
 
-  socket.join(socket.userID);
+  socket.join(socket.sessionID);
 
   let users = [];
 
   const updateUsers = () => {
+    const usersArr = [];
     for (let [id, socket] of io.of("/").sockets) {
-      users.push({
+      console.log(
+        "updateUsers: socket.sessionID: " +
+          socket.sessionID +
+          ", socket.userID: " +
+          socket.userID
+      );
+      usersArr.push({
+        sessionID: socket.sessionID,
         userID: socket.userID,
         username: socket.username,
       });
     }
+
+    const uniqueUsersArr = usersArr.reduce((unique, o) => {
+      if (
+        !unique.some(
+          (obj) => obj.sessionID === o.sessionID && obj.userID === o.userID
+        )
+      ) {
+        unique.push(o);
+      }
+      return unique;
+    }, []);
+
+    console.log("uniqueUsersArr: ", uniqueUsersArr);
+    users = [...uniqueUsersArr];
   };
   updateUsers();
 
   socket.emit("users", users);
 
   socket.broadcast.emit("user connected", {
+    sessionID: socket.sessionID,
     userID: socket.userID,
     username: socket.username,
     // users: users,
@@ -171,16 +205,17 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", async () => {
-    const matchingSockets = await io.in(socket.userID).allSockets();
-    // console.log("nbre matching sockets: " + matchingSockets.size);
-    // for (const entry of matchingSockets.entries()) {
-    //   console.log(entry);
-    // }
+    const matchingSockets = await io.in(socket.sessionID).allSockets();
+    console.log("nbre matching sockets: " + matchingSockets.size);
+    for (const entry of matchingSockets.entries()) {
+      console.log(entry);
+    }
     const isDisconnected = matchingSockets.size === 0;
     if (isDisconnected) {
       // notify other users
       users = users.filter((u) => u.userID !== socket.userID);
-      socket.broadcast.emit("user disconnected", {
+      io.emit("user disconnected", {
+        sessionID: socket.sessionID,
         userID: socket.userID,
         username: socket.username,
         // users: users,
