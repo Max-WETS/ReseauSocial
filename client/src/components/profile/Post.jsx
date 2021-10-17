@@ -159,7 +159,10 @@ function Post({ post, setPosts, isLargerThan700 }) {
                   <Button
                     w="60px"
                     h="20px"
-                    onClick={() => setUpdatePost(false)}
+                    onClick={() => {
+                      setUpdatePost(false);
+                      setBuffer(post.desc);
+                    }}
                   >
                     Cancel
                   </Button>

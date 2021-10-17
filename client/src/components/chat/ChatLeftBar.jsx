@@ -34,7 +34,7 @@ function ChatLeftBar({
   const [text, setText] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
-  const PF = "http://localhost:3000/";
+  // const PF = "http://localhost:3000/";
 
   const handleClickNewChat = async (e, suggestion) => {
     try {
@@ -67,6 +67,7 @@ function ChatLeftBar({
   }, [user.userId, conversations, user.userFriends]);
 
   const onChangeHandler = (text) => {
+    console.log("users: ", users);
     let matches = [];
     if (text.length > 0 && user.userFriends) {
       matches = users.filter((u) => {
@@ -74,7 +75,7 @@ function ChatLeftBar({
         return u.username.match(regex);
       });
     }
-    //console.log("matches", matches);
+    console.log("matches", matches);
     setSuggestions(matches);
     setText(text);
   };
@@ -176,7 +177,7 @@ function ChatLeftBar({
                         <Avatar
                           size="md"
                           name={suggestion.username}
-                          src={PF + suggestion.profilePicture}
+                          src={`../${suggestion.profilePicture}`}
                           cursor="pointer"
                         />
                         <Text

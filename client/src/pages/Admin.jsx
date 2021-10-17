@@ -19,15 +19,17 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
 } from "@chakra-ui/react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import { axiosInstance } from "../config";
 import { ImStatsDots } from "react-icons/im";
 import { FaUsers } from "react-icons/fa";
 import { BsFillTrashFill } from "react-icons/bs";
+import { AuthContext } from "../context/AuthContext";
 
 function Admin() {
+  const { user } = useContext(AuthContext);
   const [usersData, setUsersData] = useState([]);
   const [activeMenu, setActiveMenu] = useState("Users");
   const menuItems = ["Statistics", "Users"];
@@ -68,7 +70,10 @@ function Admin() {
 
     const handleClickDelete = async (userId) => {
       try {
-        await axiosInstance.delete(`/users/${userId}`);
+        await axiosInstance.put(`/users/${userId}/delete`, {
+          userId: user.userId,
+          isAdmin: user.isAdmin,
+        });
       } catch (err) {
         console.log(err);
       }
@@ -231,7 +236,7 @@ function Admin() {
                   </Thead>
                   <Tbody>
                     {usersData.map((userData) => (
-                      <Row userData={userData} />
+                      <Row key={userData._id} userData={userData} />
                     ))}
                   </Tbody>
                 </Table>

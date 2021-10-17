@@ -13,7 +13,7 @@ router.get("/:id", userController.getUser);
 // update user
 router.put("/:id", userController.updateUser);
 // delete user
-router.delete("/:id", userController.deleteUser);
+router.put("/:id/delete", userController.deleteUser);
 
 // upload
 router.post("/upload", upload.single("file"), uploadController.uploadPicture);
