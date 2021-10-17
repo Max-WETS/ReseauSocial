@@ -6,20 +6,12 @@ import {
   Text,
   Avatar,
   Box,
-  Circle,
   Button,
   IconButton,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuIcon,
-  MenuCommand,
-  MenuDivider,
-  Input,
   Textarea,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
@@ -30,7 +22,7 @@ import { axiosInstance } from "../../config";
 import { timeFormatting } from "../../timeAgo";
 import { AuthContext } from "../../context/AuthContext";
 
-function Post({ post, setPosts }) {
+function Post({ post, setPosts, isLargerThan700 }) {
   const { user } = useContext(AuthContext);
   const [postUser, setPostUser] = useState({});
   const PF = "http://localhost:3000/";
@@ -81,7 +73,6 @@ function Post({ post, setPosts }) {
     <>
       <Box bg="gray.100" w="100%" h="5px" />
       <Flex
-        w="500px"
         paddingTop="10px"
         paddingLeft="10px"
         paddingRight="10px"
@@ -90,6 +81,7 @@ function Post({ post, setPosts }) {
         borderRadius="10%"
         margin="auto"
         justifyContent="center"
+        maxW="500px"
       >
         <VStack paddingBottom="20px" alignItems="flex-start" minW="100%">
           <HStack

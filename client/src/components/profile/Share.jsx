@@ -13,7 +13,7 @@ import { AiFillPicture } from "react-icons/ai";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { axiosInstance } from "../../config";
 
-function Share({ user, userData, setPosts, posts }) {
+function Share({ user, userData, setPosts, posts, isLargerThan700 }) {
   const PF = "http://localhost:3000/";
   const [newPost, setNewPost] = useState("");
 
@@ -32,12 +32,12 @@ function Share({ user, userData, setPosts, posts }) {
 
   return (
     <Flex
-      w="500px"
       paddingTop="10px"
       borderRadius="10%"
       margin="auto"
       justifyContent="center"
       alignItems="center"
+      maxW="500px"
     >
       <VStack>
         <HStack
@@ -57,7 +57,7 @@ function Share({ user, userData, setPosts, posts }) {
           />
           <Input
             h="35px"
-            w="360px"
+            w={isLargerThan700 ? "18rem" : "12rem"}
             borderRadius="10px"
             bg="gray.100"
             type="mood"
@@ -66,14 +66,14 @@ function Share({ user, userData, setPosts, posts }) {
             onChange={(e) => setNewPost(e.target.value)}
           />
         </HStack>
-        <HStack paddingBottom="5px">
-          <Button w="220px" bg="white">
+        <HStack paddingBottom="5px" spacing={12}>
+          <Button minW="120px" bg="white">
             <Box w="30px" mr="4px">
               <AiFillPicture sizes="sm" color="red" />
             </Box>
             <Text>Picture</Text>
           </Button>
-          <Button w="220px" bg="white" onClick={handleClickNewPost}>
+          <Button minW="120px" bg="white" onClick={handleClickNewPost}>
             <Box w="30px" mr="4px">
               <RiSendPlaneFill sizes="sm" color="green" />
             </Box>

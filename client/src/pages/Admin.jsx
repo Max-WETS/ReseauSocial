@@ -19,17 +19,15 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
 } from "@chakra-ui/react";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
-import { AuthContext } from "../context/AuthContext";
 import { axiosInstance } from "../config";
 import { ImStatsDots } from "react-icons/im";
 import { FaUsers } from "react-icons/fa";
 import { BsFillTrashFill } from "react-icons/bs";
 
 function Admin() {
-  const { user, connectedUsers } = useContext(AuthContext);
   const [usersData, setUsersData] = useState([]);
   const [activeMenu, setActiveMenu] = useState("Users");
   const menuItems = ["Statistics", "Users"];

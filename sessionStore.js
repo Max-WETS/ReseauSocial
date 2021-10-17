@@ -2,6 +2,7 @@
   findSession(id) {}
   saveSession(id, session) {}
   findAllSessions() {}
+  getSessionByUserID(userID) {}
 }
 
 class InMemorySessionStore extends SessionStore {
@@ -20,6 +21,12 @@ class InMemorySessionStore extends SessionStore {
 
   findAllSessions() {
     return [...this.sessions];
+  }
+
+  getSessionByUserID(userID) {
+    return [...this.sessions].find(
+      ([key, value]) => value.userID === userID
+    )?.[0];
   }
 }
 

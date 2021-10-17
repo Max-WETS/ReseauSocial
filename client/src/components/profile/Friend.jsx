@@ -14,7 +14,7 @@ import { axiosInstance } from "../../config";
 import { AuthContext } from "../../context/AuthContext";
 
 function Friend({ friend, setFriends, isUserProfile, userData }) {
-  const PF = "http://localhost:3000/";
+  // const PF = "http://localhost:3000/";
   const { user, dispatch } = useContext(AuthContext);
   const ifIsAdmin = !isUserProfile && user.isAdmin === true;
 

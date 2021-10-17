@@ -1,12 +1,10 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
-  Text,
   FormControl,
   Input,
   Button,
   VStack,
-  HStack,
   Flex,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
@@ -15,7 +13,6 @@ import { axiosInstance } from "../config";
 
 function ResetPassword() {
   const { token } = useParams();
-  const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

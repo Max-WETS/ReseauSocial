@@ -25,8 +25,8 @@ function ProfileMenu({ userData, friends, setFriends, isUserProfile }) {
           </TabList>
         </Container>
         <Box w="100%" h="10px" bg="gray.100" />
-        <Box bg="gray.100" maxH="100%">
-          <Container maxW="50%" bg="white" minW="500px" padding={0}>
+        <Box bg="gray.100" maxH="100%" pb="20px">
+          <Container maxW="45%" bg="white" minW="350px" padding={0}>
             <TabPanels>
               <TabPanel p={0}>
                 <About userData={userData} isUserProfile={isUserProfile} />

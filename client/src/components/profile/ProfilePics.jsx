@@ -33,7 +33,6 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
   const [isLargerThan900] = useMediaQuery("(min-width: 900px)");
   const { user, dispatch } = useContext(AuthContext);
   // const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const PF = "";
   const [file, setFile] = useState();
   const [recommendations, setRecommendations] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -237,7 +236,7 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
               </Popover>
               {isLargerThan900 ? (
                 <HStack
-                  visibility={isUserProfile ? "visible" : "hidden"}
+                  visibility={isUserProfile ? "hidden" : "hidden"}
                   borderRadius="md"
                   pl="6px"
                   pr="6px"
@@ -255,6 +254,7 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
                 </HStack>
               ) : (
                 <Box
+                  visibility="hidden"
                   borderRadius="md"
                   border="2px solid lightgray"
                   bg="gray.100"

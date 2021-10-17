@@ -4,7 +4,7 @@ import { axiosInstance } from "../../config";
 import { AuthContext } from "../../context/AuthContext";
 
 function ChatFriend({ conversation, user, currentChat }) {
-  const PF = "http://localhost:3000/";
+  // const PF = "http://localhost:3000/";
   const { connectedUsers } = useContext(AuthContext);
   const [friend, setFriend] = useState(null);
   const [isCurrentChat, setIsCurrentChat] = useState(false);

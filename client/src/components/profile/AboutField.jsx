@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Text, HStack, Box, Flex, Button, Input } from "@chakra-ui/react";
+import { Text, HStack, Button, Input } from "@chakra-ui/react";
 import { MdDescription, MdEmail } from "react-icons/md";
 import { FaBirthdayCake, FaCity } from "react-icons/fa";
 import { AiFillEdit } from "react-icons/ai";
@@ -19,7 +19,7 @@ function AboutField({
   return (
     <>
       {!updateForm && (
-        <HStack w="100%" justifyContent="space-between">
+        <HStack w="100%" justifyContent="space-between" pr="10px">
           <Text
             w="100%"
             h="25px"

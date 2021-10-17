@@ -12,11 +12,14 @@ import {
   Tab,
   TabPanel,
   SimpleGrid,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import Friend from "./Friend";
 
 function Friends({ friends, setFriends, userData, isUserProfile }) {
+  const [isLargerThan700] = useMediaQuery("(min-width: 700px)");
+
   const confirmedFriends =
     friends.filter((friend) => friend.status === "confirmé") || null;
   const waitingFriends =
@@ -27,13 +30,15 @@ function Friends({ friends, setFriends, userData, isUserProfile }) {
     friends.filter((friend) => friend.status === "recommandé") || null;
 
   return (
-    <Container w="600px" paddingTop="10px" pr={0} pl={0}>
+    <Container minW="300px" paddingTop="10px" pr={0} pl={0}>
       <Grid
         templateColumns="repeat(3, 1fr)"
         paddingBottom="20px"
         alignItems="center"
       >
-        <Text fontWeight="bold">Friends</Text>
+        <Text ml={2} mr={2} fontWeight="bold">
+          Friends
+        </Text>
         <InputGroup>
           <InputLeftElement
             pointerEvents="none"
@@ -50,13 +55,23 @@ function Friends({ friends, setFriends, userData, isUserProfile }) {
       </Grid>
       <Tabs variant="soft-rounded" colorScheme="blue.100">
         <TabList borderBottom="solid 1px lightgray">
-          <Tab>{`Confirmed (${confirmedFriends.length})`}</Tab>
-          <Tab>{`Pending (${waitingFriends.length})`}</Tab>
-          <Tab>{`Recommended (${recommendedFriends.length})`}</Tab>
+          <Tab>
+            {isLargerThan700
+              ? `Confirmed (${confirmedFriends.length})`
+              : "Confirmed"}
+          </Tab>
+          <Tab>
+            {isLargerThan700 ? `Pending (${waitingFriends.length})` : "Pending"}
+          </Tab>
+          <Tab>
+            {isLargerThan700
+              ? `Recommended (${recommendedFriends.length})`
+              : "Recom."}
+          </Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
-            <SimpleGrid columns={2} spacing={5}>
+            <SimpleGrid columns={isLargerThan700 ? 2 : 1} spacing={5}>
               {confirmedFriends.map((friend) => (
                 <Friend
                   key={friend.friendId}
@@ -69,7 +84,7 @@ function Friends({ friends, setFriends, userData, isUserProfile }) {
             </SimpleGrid>
           </TabPanel>
           <TabPanel>
-            <SimpleGrid columns={2} spacing={5}>
+            <SimpleGrid columns={isLargerThan700 ? 2 : 1} spacing={5}>
               {waitingFriends.map((friend) => (
                 <Friend
                   key={friend.friendId}
@@ -82,7 +97,7 @@ function Friends({ friends, setFriends, userData, isUserProfile }) {
             </SimpleGrid>
           </TabPanel>
           <TabPanel>
-            <SimpleGrid columns={2} spacing={5}>
+            <SimpleGrid columns={isLargerThan700 ? 2 : 1} spacing={5}>
               {recommendedFriends.map((friend) => (
                 <Friend
                   key={friend.friendId}

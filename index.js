@@ -198,7 +198,9 @@ io.on("connection", (socket) => {
   });
 
   socket.on("private message", ({ message, to }) => {
-    socket.to(to).emit("private message", {
+    const receiverSessionID = sessionStore.getSessionByUserID(to);
+    console.log("receiverSessionID", receiverSessionID);
+    socket.to(receiverSessionID).emit("private message", {
       senderID: socket.userID,
       message,
     });

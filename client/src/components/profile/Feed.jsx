@@ -3,10 +3,12 @@ import { axiosInstance } from "../../config";
 import { AuthContext } from "../../context/AuthContext";
 import Post from "./Post";
 import Share from "./Share";
+import { useMediaQuery } from "@chakra-ui/react";
 
 function Feed({ userData }) {
   const [posts, setPosts] = useState([]);
   const [confirmedFriends, setConfirmedFriends] = useState([]);
+  const [isLargerThan700] = useMediaQuery("(min-width: 700px)");
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -54,10 +56,16 @@ function Feed({ userData }) {
           userData={userData}
           setPosts={setPosts}
           posts={posts}
+          isLargerThan700={isLargerThan700}
         />
       )}
       {posts.map((p) => (
-        <Post post={p} key={p._id} setPosts={setPosts} />
+        <Post
+          post={p}
+          key={p._id}
+          setPosts={setPosts}
+          isLargerThan700={isLargerThan700}
+        />
       ))}
     </>
   );

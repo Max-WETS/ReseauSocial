@@ -12,11 +12,11 @@ import {
   MenuList,
   MenuItem,
   IconButton,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { ChatIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
-import { MdAdminPanelSettings } from "react-icons/md";
 import { RiAdminFill } from "react-icons/ri";
 import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -26,9 +26,9 @@ import { SocketContext } from "../socket";
 
 function Header() {
   const { user, connectedUsers, dispatch } = useContext(AuthContext);
+  const [isLargerThan700] = useMediaQuery("(min-width: 700px)");
   const socket = useContext(SocketContext);
   const history = useHistory();
-  const PF = "http://localhost:3000/";
 
   const handleClickLogout = () => {
     const path = "login";
@@ -47,11 +47,12 @@ function Header() {
       position="sticky"
       top={0}
       zIndex={999}
-      pr="30px"
+      pr={isLargerThan700 ? "30px" : "5px"}
     >
       <HStack spacing="10px">
         <Link to="/">
           <Center
+            display={isLargerThan700 ? "flex" : "none"}
             fontSize="24px"
             ml="20px"
             fontWeight="bold"
@@ -61,8 +62,13 @@ function Header() {
             <Text>MaxWeb</Text>
           </Center>
         </Link>
-        <SearchBar />
-        <Text color="white" position="absolute" right="220px">
+        <SearchBar isLargerThan700={isLargerThan700} />
+        <Text
+          display={isLargerThan700 ? "flex" : "none"}
+          color="white"
+          position="absolute"
+          right="220px"
+        >
           Online users: {connectedUsers ? connectedUsers.length : "0"}
         </Text>
       </HStack>
@@ -70,11 +76,12 @@ function Header() {
       <Flex
         flexDirection="row"
         alignItems="center"
-        justifyContent="space-between"
+        justifyContent={isLargerThan700 ? "space-between" : "flex-end"}
         w="10.5rem"
       >
         <Link to={`/profile/${user.userId}`}>
           <Flex
+            display={isLargerThan700 ? "flex" : "none"}
             _hover={{ bg: "gray.200" }}
             align="center"
             maxW="100px"
@@ -130,7 +137,9 @@ function Header() {
             icon={<ChevronDownIcon />}
           ></MenuButton>
           <MenuList m={0}>
-            <MenuItem icon={<FaUser />}>Profile</MenuItem>
+            <Link to={`/profile/${user.userId}`}>
+              <MenuItem icon={<FaUser />}>Profile</MenuItem>
+            </Link>
             {user.isAdmin ? (
               <Link to="/admin">
                 <MenuItem icon={<RiAdminFill />}>Admin</MenuItem>

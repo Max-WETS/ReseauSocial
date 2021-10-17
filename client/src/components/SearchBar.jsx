@@ -14,7 +14,7 @@ import { SearchIcon } from "@chakra-ui/icons";
 import { axiosInstance } from "../config";
 import { AuthContext } from "../context/AuthContext";
 
-function SearchBar() {
+function SearchBar({ isLargerThan700 }) {
   const { user } = useContext(AuthContext);
   const [users, setUsers] = useState([]);
   const [text, setText] = useState("");
@@ -47,17 +47,23 @@ function SearchBar() {
   };
 
   return (
-    <VStack position="absolute" left="120px" top="8px" spacing={0}>
+    <VStack
+      position="absolute"
+      left={isLargerThan700 ? "120px" : "0px"}
+      top="8px"
+      spacing={0}
+    >
       <InputGroup>
         <InputLeftElement
           pointerEvents="none"
           children={<SearchIcon color="gray.500" />}
         />
         <Input
+          w={isLargerThan700 ? "220px" : "160px"}
           h="35px"
           bg="white"
           type="text"
-          placeholder="Search someone..."
+          placeholder={isLargerThan700 ? "Search someone..." : "Search..."}
           onChange={(e) => onChangeHandler(e.target.value)}
           value={text}
         />

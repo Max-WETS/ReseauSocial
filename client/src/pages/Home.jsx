@@ -1,6 +1,7 @@
 import { Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 function Home() {
   return (
@@ -8,7 +9,7 @@ function Home() {
       <Header />
       <VStack
         spacing={0}
-        h="93vh"
+        h="84.2vh"
         w="100vw"
         m={0}
         alignItems="center"
@@ -28,6 +29,7 @@ function Home() {
           MaxWeb
         </Text>
       </VStack>
+      <Footer />
     </>
   );
 }
