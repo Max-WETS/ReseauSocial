@@ -38,17 +38,6 @@ mongoose.connection.on("error", (err) => {
 
 app.use("/images", express.static(path.join(__dirname, "public", "images")));
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "public/images");
-  },
-  filename: (req, file, cb) => {
-    cb(null, req.body.name);
-  },
-});
-
-const upload = multer({ storage: storage });
-
 const corsOptions = {
   origin: "http://localhost:3000",
   credentials: true,
@@ -72,10 +61,10 @@ app.use("/api/friends", friendsRoute);
 app.use("/api/conversations", conversationsRoute);
 
 // only intended for heroku build
-// app.use(express.static(path.join(__dirname, "client", "build")));
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-// });
+app.use(express.static(path.join(__dirname, "client", "build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
 
 httpServer.listen(process.env.PORT || 5000, () => {
   console.log("Backend server running".green);
@@ -139,12 +128,12 @@ io.on("connection", (socket) => {
     username: socket.username,
     connected: true,
   });
-  console.log(
-    "sessionID à sauvegarder: " +
-      socket.sessionID +
-      ", session's username: " +
-      socket.username
-  );
+  // console.log(
+  //   "sessionID à sauvegarder: " +
+  //     socket.sessionID +
+  //     ", session's username: " +
+  //     socket.username
+  // );
 
   socket.emit("session", {
     sessionID: socket.sessionID,
@@ -159,12 +148,12 @@ io.on("connection", (socket) => {
   const updateUsers = () => {
     const usersArr = [];
     for (let [id, socket] of io.of("/").sockets) {
-      console.log(
-        "updateUsers: socket.sessionID: " +
-          socket.sessionID +
-          ", socket.userID: " +
-          socket.userID
-      );
+      // console.log(
+      //   "updateUsers: socket.sessionID: " +
+      //     socket.sessionID +
+      //     ", socket.userID: " +
+      //     socket.userID
+      // );
       usersArr.push({
         sessionID: socket.sessionID,
         userID: socket.userID,
@@ -183,7 +172,7 @@ io.on("connection", (socket) => {
       return unique;
     }, []);
 
-    console.log("uniqueUsersArr: ", uniqueUsersArr);
+    // console.log("uniqueUsersArr: ", uniqueUsersArr);
     users = [...uniqueUsersArr];
   };
   updateUsers();
@@ -199,7 +188,7 @@ io.on("connection", (socket) => {
 
   socket.on("private message", ({ message, to }) => {
     const receiverSessionID = sessionStore.getSessionByUserID(to);
-    console.log("receiverSessionID", receiverSessionID);
+    // console.log("receiverSessionID", receiverSessionID);
     socket.to(receiverSessionID).emit("private message", {
       senderID: socket.userID,
       message,
@@ -208,10 +197,10 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", async () => {
     const matchingSockets = await io.in(socket.sessionID).allSockets();
-    console.log("nbre matching sockets: " + matchingSockets.size);
-    for (const entry of matchingSockets.entries()) {
-      console.log(entry);
-    }
+    // console.log("nbre matching sockets: " + matchingSockets.size);
+    // for (const entry of matchingSockets.entries()) {
+    //   console.log(entry);
+    // }
     const isDisconnected = matchingSockets.size === 0;
     if (isDisconnected) {
       // notify other users
@@ -229,16 +218,16 @@ io.on("connection", (socket) => {
         connected: false,
       });
       const session = sessionStore.findSession(socket.sessionID);
-      console.log(
-        "session déconnectée: " +
-          socket.sessionID +
-          ", session's username: " +
-          session.username +
-          ", session's userID: " +
-          session.userID +
-          ", statut de connexion: " +
-          session.connected
-      );
+      // console.log(
+      //   "session déconnectée: " +
+      //     socket.sessionID +
+      //     ", session's username: " +
+      //     session.username +
+      //     ", session's userID: " +
+      //     session.userID +
+      //     ", statut de connexion: " +
+      //     session.connected
+      // );
     }
   });
 });

@@ -24,14 +24,14 @@ function App() {
 
   const handleNewSession = useCallback(
     ({ sessionID, userID, username }) => {
-      console.log(
-        "sessionID reçu client-side: " +
-          sessionID +
-          ", session username: " +
-          username +
-          ", session userID: " +
-          userID
-      );
+      // console.log(
+      //   "sessionID reçu client-side: " +
+      //     sessionID +
+      //     ", session username: " +
+      //     username +
+      //     ", session userID: " +
+      //     userID
+      // );
       socket.auth = { sessionID };
       localStorage.setItem("sessionID", sessionID);
       socket.userID = userID;
@@ -49,25 +49,25 @@ function App() {
 
   const handleNewConnectedUser = useCallback(
     (user) => {
-      console.log(
-        "new user / sessionID: ",
-        user.sessionID,
-        ", userID: " + user.userID
-      );
-      console.log(
-        "connected users: ",
-        connectedUsers,
-        "nouvel utilisateur: ",
-        !connectedUsers.find(
-          (u) => u.sessionID === user.sessionID && u.userID && user.sessionID
-        ),
-        "utilisateur existant: ",
-        connectedUsers.find(
-          (u) => u.sessionID === user.sessionID && u.userID && user.sessionID
-        ),
-        "utilisateur connecté: ",
-        user
-      );
+      // console.log(
+      //   "new user / sessionID: ",
+      //   user.sessionID,
+      //   ", userID: " + user.userID
+      // );
+      // console.log(
+      //   "connected users: ",
+      //   connectedUsers,
+      //   "nouvel utilisateur: ",
+      //   !connectedUsers.find(
+      //     (u) => u.sessionID === user.sessionID && u.userID && user.sessionID
+      //   ),
+      //   "utilisateur existant: ",
+      //   connectedUsers.find(
+      //     (u) => u.sessionID === user.sessionID && u.userID && user.sessionID
+      //   ),
+      //   "utilisateur connecté: ",
+      //   user
+      // );
       if (
         !connectedUsers.find(
           (u) => u.userID === user.userID && u.sessionID === user.sessionID
@@ -82,8 +82,6 @@ function App() {
 
   const handleDisconnectedUser = useCallback(
     (user) => {
-      console.log("ok");
-      console.log("disconnection / user.sessionID: ", user.sessionID);
       dispatch({ type: "USER_DISCONNECTED", payload: user.sessionID });
       setConnectedUsers((prev) =>
         [...prev].filter((u) => u.sessionID !== user.sessionID)
@@ -96,7 +94,7 @@ function App() {
     if (!user) return;
 
     const sessionID = localStorage.getItem("sessionID");
-    console.log("client-side sessionID: " + sessionID);
+    // console.log("client-side sessionID: " + sessionID);
 
     if (sessionID) {
       socket.auth = { sessionID };
@@ -135,12 +133,12 @@ function App() {
     handleDisconnectedUser,
   ]);
 
-  useEffect(() => {
-    console.log("mise à jour de connectedUsers: ");
-    for (let u of connectedUsers) {
-      console.log(u);
-    }
-  }, [connectedUsers]);
+  // useEffect(() => {
+  //   console.log("mise à jour de connectedUsers: ");
+  //   for (let u of connectedUsers) {
+  //     console.log(u);
+  //   }
+  // }, [connectedUsers]);
 
   return (
     <Router>
