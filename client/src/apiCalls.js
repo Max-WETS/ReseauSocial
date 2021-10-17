@@ -8,12 +8,12 @@ export const loginCall = async (userCredential, dispatch) => {
     const friends = await axiosInstance.get(`/friends/${res.data.user}`);
     const users = await axiosInstance.get(`/users`);
 
-    // const friendsArr = [...friends.data];
-    // const usersArr = [...users.data];
     for (let friend of friends.data) {
       const userData = users.data.filter((u) => u._id === friend.friendId)[0];
-      friend.username = userData.username;
-      friend.profilePicture = userData.profilePicture;
+      friend.username = userData?.username ? userData.username : "Unkown user";
+      friend.profilePicture = userData?.profilePicture
+        ? userData.profilePicture
+        : "";
     }
 
     dispatch({
@@ -27,6 +27,7 @@ export const loginCall = async (userCredential, dispatch) => {
       },
     });
   } catch (err) {
+    console.log(err);
     dispatch({ type: "LOGIN_FAILURE", payload: err });
   }
 };

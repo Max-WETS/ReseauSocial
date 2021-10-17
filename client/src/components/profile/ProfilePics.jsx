@@ -36,6 +36,7 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
   const [file, setFile] = useState();
   const [recommendations, setRecommendations] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [profilePicPath, setProfilePicPath] = useState("");
 
   const handlePicture = async (e) => {
     e.preventDefault();
@@ -130,6 +131,18 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
     fetchRecommendations();
   }, [user.userId, userData._id]);
 
+  useEffect(() => {
+    if (isUserProfile) {
+      user.profilePicture === ""
+        ? setProfilePicPath("")
+        : setProfilePicPath(user.profilePicture);
+    } else {
+      userData.profilePicture === ""
+        ? setProfilePicPath("")
+        : setProfilePicPath(userData.profilePicture);
+    }
+  }, [isUserProfile, user.profilePicture, userData.profilePicture]);
+
   return (
     <>
       <Box maxH="450px">
@@ -164,13 +177,9 @@ function ProfilePics({ userData, profileUserStatus, isUserProfile }) {
                   borderRadius="50%"
                   name={userData.username}
                   src={
-                    isUserProfile
-                      ? user.profilePicture
-                        ? `../${user.profilePicture}`
-                        : `../person/noAvatar.jpg`
-                      : userData.profilePicture
-                      ? `../${userData.profilePicture}`
-                      : `../person/noAvatar.jpg`
+                    profilePicPath !== ""
+                      ? __dirname + profilePicPath
+                      : "../person/noAvatar.png"
                   }
                   cursor="pointer"
                   border="white 2px solid"

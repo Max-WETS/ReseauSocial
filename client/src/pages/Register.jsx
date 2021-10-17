@@ -51,9 +51,6 @@ function Register() {
           <Text fontSize="50px" fontWeight="800" color="blue.400" mb="10px">
             MaxWeb
           </Text>
-          <Text fontSize="24px">
-            Connect with friends and the world around you on MaxWeb
-          </Text>
         </VStack>
         <VStack flex={1} justifyContent="center">
           <Formik>
@@ -61,10 +58,7 @@ function Register() {
               h="300px"
               p="20px"
               bg="white"
-              borderRadius="10px"
               display="flex"
-              flexDirection="column"
-              justifyContent="space-between"
               onSubmit={handleClick}
             >
               <FormControl>

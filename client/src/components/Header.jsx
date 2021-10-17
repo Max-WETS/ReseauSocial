@@ -6,6 +6,7 @@ import {
   Text,
   HStack,
   Avatar,
+  Image,
   Circle,
   Menu,
   MenuButton,
@@ -63,22 +64,21 @@ function Header() {
           </Center>
         </Link>
         <SearchBar isLargerThan700={isLargerThan700} />
-        <Text
-          display={isLargerThan700 ? "flex" : "none"}
-          color="white"
-          position="absolute"
-          right="220px"
-        >
-          Online users: {connectedUsers ? connectedUsers.length : "0"}
-        </Text>
       </HStack>
       <Spacer />
       <Flex
         flexDirection="row"
         alignItems="center"
         justifyContent={isLargerThan700 ? "space-between" : "flex-end"}
-        w="10.5rem"
+        maxW="19.5rem"
       >
+        <Text
+          display={isLargerThan700 ? "flex" : "none"}
+          color="white"
+          mr="6px"
+        >
+          Online users: {connectedUsers ? connectedUsers.length : "0"}
+        </Text>
         <Link to={`/profile/${user.userId}`}>
           <Flex
             display={isLargerThan700 ? "flex" : "none"}
@@ -91,15 +91,16 @@ function Header() {
             borderRadius="50px"
             cursor="pointer"
           >
-            <Avatar
+            <Image
               ml="1px"
-              size="sm"
+              w="28px"
+              h="28px"
               borderRadius="50%"
               name={user?.username}
               src={
-                user.profilePicture
+                user.profilePicture !== ""
                   ? `../${user.profilePicture}`
-                  : "../person/noAvatar.jpg"
+                  : "../person/noAvatar.png"
               }
             />
             <Text ml="4px" mr="8px">

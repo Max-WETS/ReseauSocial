@@ -75,7 +75,7 @@ function ChatLeftBar({
         return u.username.match(regex);
       });
     }
-    console.log("matches", matches);
+    // console.log("matches", matches);
     setSuggestions(matches);
     setText(text);
   };
