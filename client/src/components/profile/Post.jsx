@@ -97,7 +97,7 @@ function Post({ post, setPosts, isLargerThan700 }) {
                 <Avatar
                   size="md"
                   name={postUser?.username}
-                  src={PF + postUser?.profilePicture}
+                  src={`../${postUser?.profilePicture}`}
                   cursor="pointer"
                 />
               </Link>

@@ -16,7 +16,9 @@ function Message({ message, own, user, friend }) {
           h="32px"
           mr="10px"
           name={own ? user.username : friend.username}
-          src={own ? PF + user.profilePicture : PF + friend.profilePicture}
+          src={
+            own ? `../${user.profilePicture}` : `../${friend.profilePicture}`
+          }
         />
         <Text
           p="10px"

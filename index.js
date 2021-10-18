@@ -6,7 +6,6 @@ const httpServer = createServer(app);
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
-const helmet = require("helmet");
 const cors = require("cors");
 const morgan = require("morgan");
 const multer = require("multer");
@@ -19,7 +18,7 @@ const router = express.Router();
 const path = require("path");
 const color = require("colors");
 const socket = require("socket.io");
-const { checkUser, requireAuth } = require("./middleware/auth.middleware");
+const { checkUser } = require("./middleware/auth.middleware");
 dotenv.config();
 
 mongoose.connect(
@@ -48,10 +47,6 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.get("*", checkUser);
-app.get("/jwtid", requireAuth, (req, res) => {
-  res.status(200).send(res.locals.user._id);
-});
-// app.use(helmet());
 app.use(morgan("common"));
 
 app.use("/api/auth", authRoute);

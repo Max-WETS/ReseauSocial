@@ -73,6 +73,7 @@ function ChatWindow({ currentChat, user }) {
 
   useEffect(() => {
     socket.on("private message", ({ senderID, message }) => {
+      setMessages((prev) => [...prev, message]);
       const getNewMessage = async () => {
         try {
           const res = await axiosInstance.get(
@@ -83,7 +84,7 @@ function ChatWindow({ currentChat, user }) {
           console.log(err);
         }
       };
-      getNewMessage();
+      // getNewMessage();
     });
   }, [currentChat?._id]);
 
@@ -129,7 +130,7 @@ function ChatWindow({ currentChat, user }) {
           ml="1px"
           size="md"
           name={friend?.username || "unknown user"}
-          src={PF + friend?.profilePicture || PF + "person/noAvatar.jpg"}
+          src={`../${friend?.profilePicture}`}
         />
         <Text ml="10px" mr="8px">
           {friend?.username || "unknown user"}
