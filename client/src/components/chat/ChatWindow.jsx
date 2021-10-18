@@ -79,12 +79,12 @@ function ChatWindow({ currentChat, user }) {
           const res = await axiosInstance.get(
             `/conversations/chat-id/${currentChat?._id}`
           );
-          setMessages(res.data.messages);
+          // setMessages(res.data.messages);
         } catch (err) {
           console.log(err);
         }
       };
-      // getNewMessage();
+      getNewMessage();
     });
   }, [currentChat?._id]);
 
