@@ -73,13 +73,13 @@ function ChatWindow({ currentChat, user }) {
 
   useEffect(() => {
     socket.on("private message", ({ senderID, message }) => {
-      setMessages((prev) => [...prev, message]);
+      // setMessages((prev) => [...prev, message]);
       const getNewMessage = async () => {
         try {
           const res = await axiosInstance.get(
             `/conversations/chat-id/${currentChat?._id}`
           );
-          // setMessages(res.data.messages);
+          setMessages(res.data.messages);
         } catch (err) {
           console.log(err);
         }
