@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://maxweb21.herokuapp.com/api",
   withCredentials: true,
 });
